@@ -1,0 +1,13 @@
+$z-indexes: ('preloader', 'navigation', 'content', 'canvas');
+
+$_easings: (
+  ease-in-out: cubic-bezier(0.77, 0, 0.175, 1),
+);
+
+$breakpoints: (
+  'phone': 768px,
+  'tablet': 1024px,
+  'desktop': 1920px,
+) !default;
+
+@import 'node_modules/include-media/dist/include-media';

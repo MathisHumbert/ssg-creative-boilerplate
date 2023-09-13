@@ -1,0 +1,38 @@
+{
+  "name": "ssg-creative-boilerplate",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "clean": "rm -rf _site",
+    "dev": "yarn run clean && eleventy --config=.eleventy.cjs --serve --incremental",
+    "build": "yarn run clean && eleventy --config=.eleventy.cjs"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^2.0.1",
+    "@11ty/eleventy-plugin-vite": "^4.0.0",
+    "@prismicio/client": "^7.2.0",
+    "@prismicio/helpers": "^2.3.9",
+    "axios": "^1.5.0",
+    "dotenv": "^16.3.1",
+    "html-minifier": "^4.0.0",
+    "pug": "^3.0.2",
+    "sass": "^1.66.1",
+    "vite": "^4.4.5",
+    "vite-plugin-glslify": "^2.0.2",
+    "vite-plugin-pwa": "^0.16.5"
+  },
+  "dependencies": {
+    "auto-bind": "^5.0.1",
+    "events": "^3.3.0",
+    "fontfaceobserver": "^2.3.0",
+    "gsap": "^3.12.2",
+    "include-media": "^2.0.0",
+    "lodash": "^4.17.21",
+    "nodelist-foreach-polyfill": "^1.2.0",
+    "normalize-wheel": "^1.0.1",
+    "prefix": "^1.0.0",
+    "three": "^0.156.1",
+    "ua-parser-js": "^1.0.36"
+  }
+}
