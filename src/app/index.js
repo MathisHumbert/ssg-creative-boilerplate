@@ -1,6 +1,6 @@
-import '@styles/index.scss';
-import '@utils/polyfill';
-import '@utils/scroll';
+import '../styles/index.scss';
+import './utils/polyfill';
+import './utils/scroll';
 
 import FontFaceObserver from 'fontfaceobserver';
 import AutoBind from 'auto-bind';
@@ -8,10 +8,10 @@ import NormalizeWheel from 'normalize-wheel';
 import gsap from 'gsap';
 import { each } from 'lodash';
 
-import Canvas from '@components/Canvas';
+import Canvas from './components/Canvas';
 
-import Home from '@pages/Home';
-import About from '@pages/About';
+import Home from './pages/Home';
+import About from './pages/About';
 
 class App {
   constructor() {
@@ -77,15 +77,17 @@ class App {
 
     const page = this.pages[url];
 
+    this.canvas.onChangeStart();
+
+    await this.page.hide();
+
     if (push) {
       window.history.pushState({}, '', url);
     }
 
     this.template = window.location.pathname;
 
-    this.page.hide();
-
-    this.canvas.onChange(this.template);
+    this.canvas.onChangeEnd(this.template, true);
 
     this.page = page;
     this.page.show();

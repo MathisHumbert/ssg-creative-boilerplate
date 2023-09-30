@@ -5,25 +5,35 @@ export default class {
   constructor({ element, elements }) {
     AutoBind(this);
 
-    const { animationDelay, animationTarget } = element.dataset;
-
-    this.delay = animationDelay;
+    const { delay, target } = element.dataset;
 
     this.element = element;
     this.elements = elements;
 
-    this.target = animationTarget ? element.closest(animationTarget) : element;
+    this.delay = isNaN(Number(delay)) ? 0 : Number(delay);
+
+    this.target = target ? element.closest(target) : element;
     this.transformPrefix = Prefix('transform');
 
     this.isVisible = false;
+  }
 
+  createAnimation() {
     if ('IntersectionObserver' in window) {
-      this.createObserver();
-
       this.animateOut();
+
+      this.createObserver();
     } else {
       this.animateIn();
     }
+  }
+
+  destroyAnimation() {
+    this.observer.disconnect();
+  }
+
+  hideAnimation() {
+    this.animateOut();
   }
 
   createObserver() {
@@ -31,15 +41,18 @@ export default class {
       entries.forEach((entry) => {
         if (!this.isVisible && entry.isIntersecting) {
           this.animateIn();
-        } else {
+        } else if (!entry.isIntersecting && this.isVisible) {
           this.animateOut();
         }
       });
-    }).observe(this.target);
+    });
+
+    this.observer.observe(this.target);
   }
 
   animateIn() {
     this.isVisible = true;
+    this.isAnimated = true;
   }
 
   animateOut() {

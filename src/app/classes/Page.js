@@ -4,8 +4,10 @@ import { each } from 'lodash';
 import Prefix from 'prefix';
 import gsap from 'gsap';
 
-import { Detection } from '@classes/Detection';
-import { clamp, lerp } from '@utils/math';
+import Highlight from '../animations/Highlight';
+import { Detection } from '../classes/Detection';
+import { clamp, lerp } from '../utils/math';
+import { mapEach } from '../utils/dom';
 
 export default class Page extends EventEmitter {
   constructor({ classes, id, element, elements, isScrollable = true }) {
@@ -18,6 +20,10 @@ export default class Page extends EventEmitter {
     this.selectors = {
       element,
       elements: {
+        preloaders: '[data-src]',
+
+        animationsHighlights: '[data-animation="highlight"]',
+
         ...elements,
       },
     };
@@ -28,7 +34,7 @@ export default class Page extends EventEmitter {
       current: 0,
       target: 0,
       limit: 0,
-      ease: 0.07,
+      ease: 0.1,
     };
 
     this.transformPrefix = Prefix('transform');
@@ -69,18 +75,31 @@ export default class Page extends EventEmitter {
         current: 0,
         target: 0,
         limit: this.elements.wrapper.clientHeight - window.innerHeight,
-        ease: 0.07,
+        ease: 0.1,
       };
     }
 
     this.createAnimations();
     this.createObserver();
+    this.createPreloaders();
   }
 
   /**
    * Animations.
    */
-  createAnimations() {}
+  createAnimations() {
+    /**
+     * Highlight.
+     */
+    this.animationsHighlight = mapEach(
+      this.elements.animationsHighlights,
+      (element) => {
+        return new Highlight({ element });
+      }
+    );
+
+    this.animations.push(...this.animationsHighlight);
+  }
 
   /**
    * Observer.
@@ -108,6 +127,19 @@ export default class Page extends EventEmitter {
   }
 
   /**
+   * Loader.
+   */
+  createPreloaders() {
+    this.preloaders = mapEach(
+      this.elements.preloaders,
+      (element) =>
+        new AsyncLoad({
+          element,
+        })
+    );
+  }
+
+  /**
    * Animations.
    */
   reset() {
@@ -126,8 +158,10 @@ export default class Page extends EventEmitter {
     this.transform(this.elements.wrapper, this.scroll.current);
   }
 
-  show(url) {
+  show() {
     this.reset();
+
+    each(this.animations, (animation) => animation.createAnimation());
 
     this.isVisible = true;
 
@@ -141,10 +175,12 @@ export default class Page extends EventEmitter {
     return Promise.resolve();
   }
 
-  hide(url) {
+  hide() {
     this.isVisible = false;
 
     this.removeEventListeners();
+
+    each(this.animations, (animation) => animation.destroyAnimation());
 
     return Promise.resolve();
   }
@@ -174,7 +210,7 @@ export default class Page extends EventEmitter {
   }
 
   onTouchDown(event) {
-    if (!Detection.isMobile) return;
+    if (!Detection.isMobile || !this.isVisible) return;
 
     this.isDown = true;
 
@@ -183,7 +219,7 @@ export default class Page extends EventEmitter {
   }
 
   onTouchMove(event) {
-    if (!Detection.isMobile || !this.isDown) return;
+    if (!Detection.isMobile || !this.isDown || !this.isVisible) return;
 
     const y = event.touches ? event.touches[0].clientY : event.clientY;
     const distance = (this.start - y) * 3;
@@ -192,12 +228,14 @@ export default class Page extends EventEmitter {
   }
 
   onTouchUp() {
-    if (!Detection.isMobile) return;
+    if (!Detection.isMobile || !this.isVisible) return;
 
     this.isDown = false;
   }
 
   onWheel(normalized) {
+    if (!this.isVisible) return;
+
     const speed = normalized.pixelY;
 
     this.scroll.target += speed;
@@ -216,6 +254,8 @@ export default class Page extends EventEmitter {
    * Loop.
    */
   update() {
+    if (!this.isScrollable || !this.isVisible) return;
+
     this.scroll.target = clamp(0, this.scroll.limit, this.scroll.target);
 
     this.scroll.current = lerp(

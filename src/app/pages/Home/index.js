@@ -1,4 +1,4 @@
-import Page from '@classes/Page';
+import Page from '../../classes/Page';
 
 export default class Home extends Page {
   constructor() {
@@ -18,12 +18,12 @@ export default class Home extends Page {
   async show(url) {
     this.element.classList.add(this.classes.active);
 
-    return super.show(url);
+    return super.show();
   }
 
   async hide(url) {
     this.element.classList.remove(this.classes.active);
 
-    return super.hide(url);
+    return super.hide();
   }
 }

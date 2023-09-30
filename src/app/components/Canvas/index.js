@@ -79,20 +79,26 @@ export default class Canvas {
     this.createHome();
     this.createAbout();
 
-    this.onChange(this.template, true);
+    this.onChangeEnd(this.template, true);
   }
 
-  onChange(template, isPreloaded) {
+  onChangeStart() {
+    if (this.template === '/') {
+      this.home.hide();
+    }
+
+    if (this.template === '/about') {
+      this.about.hide();
+    }
+  }
+
+  onChangeEnd(template, isPreloaded) {
     if (template === '/') {
       this.home.show(isPreloaded);
-    } else {
-      this.home.hide();
     }
 
     if (template === '/about') {
       this.about.show(isPreloaded);
-    } else {
-      this.about.hide();
     }
 
     this.template = template;
@@ -123,6 +129,14 @@ export default class Canvas {
       this.about.onResize({ screen: this.screen, viewport: this.viewport });
     }
   }
+
+  onTouchDown(event) {}
+
+  onTouchMove(event) {}
+
+  onTouchUp() {}
+
+  onWheel(normalized) {}
 
   /**
    * Loop.
