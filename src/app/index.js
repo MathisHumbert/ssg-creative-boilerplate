@@ -6,12 +6,15 @@ import FontFaceObserver from 'fontfaceobserver';
 import AutoBind from 'auto-bind';
 import NormalizeWheel from 'normalize-wheel';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/all';
 import { each } from 'lodash';
 
 import Canvas from './components/Canvas';
 
 import Home from './pages/Home';
 import About from './pages/About';
+
+gsap.registerPlugin(ScrollTrigger);
 
 class App {
   constructor() {
@@ -30,6 +33,28 @@ class App {
 
     this.addEventListeners();
     this.addLinkListeners();
+  }
+
+  createScrollTrigger() {
+    ScrollTrigger.scrollerProxy('#wrapper', {
+      scrollTop: (value) => {
+        if (arguments.length) {
+          this.page.scroll.current = value;
+        }
+        return this.page.scroll.current;
+      },
+
+      getBoundingClientRect() {
+        return {
+          top: 0,
+          left: 0,
+          width: window.innerWidth,
+          height: window.innerHeight,
+        };
+      },
+    });
+
+    ScrollTrigger.defaults({ scroller: '#wrapper' });
   }
 
   createCanvas() {
@@ -60,6 +85,8 @@ class App {
 
     this.update();
 
+    this.createScrollTrigger();
+
     this.canvas.onPreloaded();
 
     this.page.show();
@@ -85,11 +112,13 @@ class App {
       window.history.pushState({}, '', url);
     }
 
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+
     this.template = window.location.pathname;
+    this.page = page;
 
     this.canvas.onChangeEnd(this.template, true);
 
-    this.page = page;
     this.page.show();
 
     this.onResize();
@@ -224,6 +253,6 @@ new App();
 // const font1 = new FontFaceObserver('Font1');
 // const font2 = new FontFaceObserver('Font2');
 
-// Promise.all([font1, font2])
+// Promise.all([font1.load(), font2.load()])
 //   .then(() => new App())
 //   .catch(() => new App());

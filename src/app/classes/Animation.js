@@ -16,6 +16,7 @@ export default class {
     this.transformPrefix = Prefix('transform');
 
     this.isVisible = false;
+    this.isAnimated = false;
   }
 
   createAnimation() {
@@ -29,7 +30,9 @@ export default class {
   }
 
   destroyAnimation() {
-    this.observer.disconnect();
+    if (this.observer) {
+      this.observer.disconnect();
+    }
   }
 
   hideAnimation() {
@@ -41,6 +44,9 @@ export default class {
       entries.forEach((entry) => {
         if (!this.isVisible && entry.isIntersecting) {
           this.animateIn();
+
+          // comment to repeat animation
+          this.observer.unobserve(this.element);
         } else if (!entry.isIntersecting && this.isVisible) {
           this.animateOut();
         }
@@ -57,5 +63,6 @@ export default class {
 
   animateOut() {
     this.isVisible = false;
+    this.isAnimated = false;
   }
 }

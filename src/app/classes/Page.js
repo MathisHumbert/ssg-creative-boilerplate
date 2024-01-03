@@ -21,6 +21,7 @@ export default class Page extends EventEmitter {
       element,
       elements: {
         preloaders: '[data-src]',
+        pagePreloaders: '[data-page-src]',
 
         animationsHighlights: '[data-animation="highlight"]',
 
@@ -127,7 +128,7 @@ export default class Page extends EventEmitter {
   }
 
   /**
-   * Loader.
+   * Loaders.
    */
   createPreloaders() {
     this.preloaders = mapEach(
@@ -139,6 +140,20 @@ export default class Page extends EventEmitter {
     );
   }
 
+  createPageLoader() {
+    if (this.imagesLoaded) return;
+
+    this.imagesLoaded = true;
+
+    mapEach(this.elements.pagePreloaders, (img) => {
+      const src = img.getAttribute('data-page-src');
+
+      if (src) {
+        img.src = src;
+      }
+    });
+  }
+
   /**
    * Animations.
    */
@@ -148,7 +163,7 @@ export default class Page extends EventEmitter {
       current: 0,
       target: 0,
       limit: 0,
-      ease: 0.07,
+      ease: 0.1,
     };
   }
 
@@ -263,7 +278,12 @@ export default class Page extends EventEmitter {
       this.scroll.target,
       this.scroll.ease
     );
-    this.scroll.current = Math.floor(this.scroll.current);
+
+    if (this.scroll.target === 0) {
+      this.scroll.current = Math.floor(this.scroll.current);
+    } else {
+      this.scroll.current = Math.ceil(this.scroll.current);
+    }
 
     if (this.scroll.current < 0.1) {
       this.scroll.current = 0;
