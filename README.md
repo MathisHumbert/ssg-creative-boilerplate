@@ -5,6 +5,7 @@ A boilerplate repo for creative websites using WebGL via THREE and GSAP, working
 ### Description
 
 The boilerplate in this repo is based on Luis Bizarro's "bizarroilerplate" and "Floema-Vite" repo.
+I changed some part of the boilerplate bases for my own use
 
 ## Getting Started
 
@@ -24,6 +25,8 @@ Kickstart the development environment:
 yarn dev
 ```
 
+Navigate to http://localhost:3000/
+
 ### Build
 
 To generate a static build of the project:
@@ -32,4 +35,10 @@ To generate a static build of the project:
 yarn build
 ```
 
-Navigate to http://localhost:3000/
+You can easily deploy it on vercel for free
+
+## Credits
+
+All credits goes to Luis Bizarro's "bizarroilerplate" that you can find over here https://github.com/bizarro/bizarroilerplate
+
+This boilerplate is a modern version of "bizarroilerplate" that you can find over here https://github.com/whizzbbig/Floema-Vite/tree/main
