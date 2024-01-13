@@ -39,7 +39,7 @@ export default class Canvas {
     });
 
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.setPixelRatio(1);
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     document.body.appendChild(this.renderer.domElement);
   }
