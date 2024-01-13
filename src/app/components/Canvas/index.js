@@ -111,6 +111,7 @@ export default class Canvas {
     };
 
     this.renderer.setSize(this.screen.width, this.screen.height);
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     this.camera.aspect = this.screen.width / this.screen.height;
     this.camera.updateProjectionMatrix();
