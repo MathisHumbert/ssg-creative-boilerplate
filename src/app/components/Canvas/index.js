@@ -143,8 +143,6 @@ export default class Canvas {
    * Loop.
    */
   update(scroll) {
-    this.renderer.render(this.scene, this.camera);
-
     if (this.home && this.home.update) {
       this.home.update(scroll);
     }
@@ -152,5 +150,7 @@ export default class Canvas {
     if (this.about && this.about.update) {
       this.about.update(scroll);
     }
+
+    this.renderer.render(this.scene, this.camera);
   }
 }

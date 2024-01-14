@@ -21,7 +21,6 @@ export default class Home {
       geometry: this.geometry,
       screen: this.screen,
       viewport: this.viewport,
-      color: new THREE.Vector3(1, 0, 0),
     });
   }
 
