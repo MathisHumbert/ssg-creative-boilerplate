@@ -8,6 +8,7 @@ import NormalizeWheel from 'normalize-wheel';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
 import { each } from 'lodash';
+import Stats from 'stats.js';
 
 import Canvas from './components/Canvas';
 
@@ -19,6 +20,10 @@ gsap.registerPlugin(ScrollTrigger);
 class App {
   constructor() {
     this.template = window.location.pathname;
+
+    if (import.meta.env.VITE_DEV_MODE) {
+      this.createStats();
+    }
 
     AutoBind(this);
 
@@ -75,6 +80,17 @@ class App {
     };
 
     this.page = this.pages[this.template];
+  }
+
+  /**
+   * Stats.
+   */
+  createStats() {
+    this.stats = new Stats();
+
+    this.stats.showPanel(0);
+
+    document.body.appendChild(this.stats.dom);
   }
 
   /**
@@ -182,12 +198,20 @@ class App {
    * Loop.
    */
   update() {
+    if (this.stats) {
+      this.stats.begin();
+    }
+
     if (this.page) {
       this.page.update();
     }
 
     if (this.canvas && this.canvas.update) {
       this.canvas.update(this.page.scroll.current);
+    }
+
+    if (this.stats) {
+      this.stats.end();
     }
 
     window.requestAnimationFrame(this.update.bind(this));
