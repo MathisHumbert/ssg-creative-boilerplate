@@ -79,6 +79,10 @@ class App {
       '/about': this.about,
     };
 
+    if (this.template !== '/' && this.template.endsWith('/')) {
+      this.template = this.template.slice(0, -1);
+    }
+
     this.page = this.pages[this.template];
   }
 
