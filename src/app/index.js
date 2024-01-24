@@ -11,6 +11,7 @@ import { each } from 'lodash';
 import Stats from 'stats.js';
 
 import Canvas from './components/Canvas';
+import Preloader from './components/Peloader';
 
 import Home from './pages/Home';
 import About from './pages/About';
@@ -67,7 +68,9 @@ class App {
   }
 
   createPreloader() {
-    gsap.delayedCall(1, () => this.onPreloaded());
+    this.preloader = new Preloader();
+
+    this.preloader.once('loaded', this.onPreloaded);
   }
 
   createPages() {
@@ -105,7 +108,7 @@ class App {
 
     this.update();
 
-    this.createScrollTrigger();
+    // this.createScrollTrigger();
 
     this.canvas.onPreloaded();
 

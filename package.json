@@ -26,6 +26,7 @@
     "events": "^3.3.0",
     "fontfaceobserver": "^2.3.0",
     "gsap": "^3.12.2",
+    "imagesloaded": "^5.0.0",
     "include-media": "^2.0.0",
     "lodash": "^4.17.21",
     "nodelist-foreach-polyfill": "^1.2.0",
