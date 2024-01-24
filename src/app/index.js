@@ -11,7 +11,7 @@ import { each } from 'lodash';
 import Stats from 'stats.js';
 
 import Canvas from './components/Canvas';
-import Preloader from './components/Peloader';
+import Preloader from './components/Preloader';
 
 import Home from './pages/Home';
 import About from './pages/About';
