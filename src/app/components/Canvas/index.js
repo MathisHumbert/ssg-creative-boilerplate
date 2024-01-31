@@ -79,7 +79,7 @@ export default class Canvas {
     this.createHome();
     this.createAbout();
 
-    this.onChangeEnd(this.template, true);
+    this.onChangeEnd(this.template);
   }
 
   onChangeStart() {
@@ -92,13 +92,13 @@ export default class Canvas {
     }
   }
 
-  onChangeEnd(template, isPreloaded) {
+  onChangeEnd(template) {
     if (template === '/') {
-      this.home.show(isPreloaded);
+      this.home.show();
     }
 
     if (template === '/about') {
-      this.about.show(isPreloaded);
+      this.about.show();
     }
 
     this.template = template;

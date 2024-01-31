@@ -140,7 +140,7 @@ class App {
     this.template = window.location.pathname;
     this.page = page;
 
-    this.canvas.onChangeEnd(this.template, true);
+    this.canvas.onChangeEnd(this.template);
 
     this.page.show();
 
@@ -174,7 +174,7 @@ class App {
       this.canvas.onTouchMove(event);
     }
 
-    if (this.page && this.page.onTouchDown) {
+    if (this.page && this.page.onTouchMove) {
       this.page.onTouchMove(event);
     }
   }
@@ -184,7 +184,7 @@ class App {
       this.canvas.onTouchUp(event);
     }
 
-    if (this.page && this.page.onTouchDown) {
+    if (this.page && this.page.onTouchUp) {
       this.page.onTouchUp(event);
     }
   }
