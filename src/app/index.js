@@ -87,6 +87,8 @@ class App {
     }
 
     this.page = this.pages[this.template];
+
+    this.page.createPageLoader();
   }
 
   /**
@@ -127,6 +129,8 @@ class App {
 
     const page = this.pages[url];
 
+    page.createPageLoader();
+
     this.canvas.onChangeStart();
 
     await this.page.hide();
@@ -135,7 +139,7 @@ class App {
       window.history.pushState({}, '', url);
     }
 
-    ScrollTrigger.getAll().forEach((t) => t.kill());
+    // ScrollTrigger.getAll().forEach((t) => t.kill());
 
     this.template = window.location.pathname;
     this.page = page;

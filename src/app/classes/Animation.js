@@ -46,7 +46,7 @@ export default class {
           this.animateIn();
 
           // comment to repeat animation
-          this.observer.unobserve(this.element);
+          this.observer.unobserve(this.target);
         } else if (!entry.isIntersecting && this.isVisible) {
           this.animateOut();
         }
