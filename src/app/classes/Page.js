@@ -4,10 +4,12 @@ import { each } from 'lodash';
 import Prefix from 'prefix';
 import gsap from 'gsap';
 
-import Highlight from '../animations/Highlight';
 import { Detection } from '../classes/Detection';
+import AsyncLoad from '../classes/AsyncLoad';
 import { clamp, lerp } from '../utils/math';
 import { mapEach } from '../utils/dom';
+
+import Highlight from '../animations/Highlight';
 
 export default class Page extends EventEmitter {
   constructor({ classes, id, element, elements, isScrollable = true }) {
@@ -193,8 +195,6 @@ export default class Page extends EventEmitter {
   hide() {
     this.isVisible = false;
 
-    this.removeEventListeners();
-
     each(this.animations, (animation) => animation.destroyAnimation());
 
     return Promise.resolve();
@@ -262,8 +262,6 @@ export default class Page extends EventEmitter {
    * Listeners.
    */
   addEventListeners() {}
-
-  removeEventListeners() {}
 
   /**
    * Loop.
