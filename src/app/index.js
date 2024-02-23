@@ -21,6 +21,8 @@ gsap.registerPlugin(ScrollTrigger);
 class App {
   constructor() {
     this.template = window.location.pathname;
+    this.url = window.location.pathname.replace(window.location.origin, '');
+    this.isLoading = false;
 
     if (import.meta.env.VITE_DEV_MODE) {
       this.createStats();
@@ -125,7 +127,12 @@ class App {
   }
 
   async onChange({ url, push = true }) {
+    if (this.url === url || this.isLoading) return;
+
     url = url.replace(window.location.origin, '');
+
+    this.url = url;
+    this.isLoading = true;
 
     const page = this.pages[url];
 
@@ -149,6 +156,8 @@ class App {
     this.page.show();
 
     this.onResize();
+
+    this.isLoading = false;
   }
 
   onResize() {
