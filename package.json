@@ -32,6 +32,7 @@
     "nodelist-foreach-polyfill": "^1.2.0",
     "normalize-wheel": "^1.0.1",
     "prefix": "^1.0.0",
+    "split-type": "^0.3.4",
     "stats.js": "^0.17.0",
     "three": "^0.156.1",
     "ua-parser-js": "^1.0.36"

@@ -1,9 +1,9 @@
 import gsap from 'gsap';
 
 import Animation from '../classes/Animation';
-import { smooth } from '../utils/easing';
+import { easeInOut } from '../utils/easing';
 
-export default class Highlight extends Animation {
+export default class Appear extends Animation {
   constructor({ element }) {
     super({ element, elements: {} });
   }
@@ -13,7 +13,7 @@ export default class Highlight extends Animation {
       opacity: 1,
       delay: this.delay,
       duration: 1,
-      ease: smooth,
+      ease: easeInOut,
     });
 
     super.animateIn();

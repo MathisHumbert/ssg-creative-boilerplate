@@ -7,8 +7,8 @@ import AutoBind from 'auto-bind';
 import NormalizeWheel from 'normalize-wheel';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/all';
-import { each } from 'lodash';
 import Stats from 'stats.js';
+import * as THREE from 'three';
 
 import Canvas from './components/Canvas';
 import Preloader from './components/Preloader';
@@ -16,13 +16,16 @@ import Preloader from './components/Preloader';
 import Home from './pages/Home';
 import About from './pages/About';
 
+import { each } from './utils/dom';
+
 gsap.registerPlugin(ScrollTrigger);
 
 class App {
   constructor() {
     this.template = window.location.pathname;
-    this.url = window.location.pathname.replace(window.location.origin, '');
     this.isLoading = false;
+    this.clock = new THREE.Clock();
+    this.odlElapsedTime = 0;
 
     if (import.meta.env.VITE_DEV_MODE) {
       this.createStats();
@@ -41,28 +44,6 @@ class App {
 
     this.addEventListeners();
     this.addLinkListeners();
-  }
-
-  createScrollTrigger() {
-    ScrollTrigger.scrollerProxy('#wrapper', {
-      scrollTop: (value) => {
-        if (arguments.length) {
-          this.page.scroll.current = value;
-        }
-        return this.page.scroll.current;
-      },
-
-      getBoundingClientRect() {
-        return {
-          top: 0,
-          left: 0,
-          width: window.innerWidth,
-          height: window.innerHeight,
-        };
-      },
-    });
-
-    ScrollTrigger.defaults({ scroller: '#wrapper' });
   }
 
   createCanvas() {
@@ -93,9 +74,28 @@ class App {
     this.page.createPageLoader();
   }
 
-  /**
-   * Stats.
-   */
+  createScrollTrigger() {
+    ScrollTrigger.scrollerProxy('#wrapper', {
+      scrollTop: (value) => {
+        if (arguments.length) {
+          this.page.scroll.current = value;
+        }
+        return this.page.scroll.current;
+      },
+
+      getBoundingClientRect() {
+        return {
+          top: 0,
+          left: 0,
+          width: window.innerWidth,
+          height: window.innerHeight,
+        };
+      },
+    });
+
+    ScrollTrigger.defaults({ scroller: '#wrapper' });
+  }
+
   createStats() {
     this.stats = new Stats();
 
@@ -112,7 +112,7 @@ class App {
 
     this.update();
 
-    // this.createScrollTrigger();
+    this.createScrollTrigger();
 
     this.canvas.onPreloaded();
 
@@ -127,11 +127,10 @@ class App {
   }
 
   async onChange({ url, push = true }) {
-    if (this.url === url || this.isLoading) return;
-
     url = url.replace(window.location.origin, '');
 
-    this.url = url;
+    if (this.template === url || this.isLoading) return;
+
     this.isLoading = true;
 
     const page = this.pages[url];
@@ -142,14 +141,16 @@ class App {
 
     await this.page.hide();
 
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+
     if (push) {
       window.history.pushState({}, '', url);
     }
 
-    // ScrollTrigger.getAll().forEach((t) => t.kill());
-
     this.template = window.location.pathname;
     this.page = page;
+
+    this.createScrollTrigger();
 
     this.canvas.onChangeEnd(this.template);
 
@@ -218,6 +219,10 @@ class App {
    * Loop.
    */
   update() {
+    const elapsedTime = this.clock.getElapsedTime();
+    const deltaTime = elapsedTime - this.odlElapsedTime;
+    this.odlElapsedTime = elapsedTime;
+
     if (this.stats) {
       this.stats.begin();
     }
@@ -227,12 +232,14 @@ class App {
     }
 
     if (this.canvas && this.canvas.update) {
-      this.canvas.update(this.page.scroll.current);
+      this.canvas.update(this.page.scroll.current, deltaTime);
     }
 
     if (this.stats) {
       this.stats.end();
     }
+
+    ScrollTrigger.update();
 
     window.requestAnimationFrame(this.update.bind(this));
   }
@@ -291,12 +298,8 @@ class App {
   }
 }
 
-new App();
+const satoshiFont = new FontFaceObserver('Satoshi');
 
-// Uncomment and add website's fonts
-// const font1 = new FontFaceObserver('Font1');
-// const font2 = new FontFaceObserver('Font2');
-
-// Promise.all([font1.load(), font2.load()])
-//   .then(() => new App())
-//   .catch(() => new App());
+Promise.all([satoshiFont.load()])
+  .then(() => new App())
+  .catch(() => new App());

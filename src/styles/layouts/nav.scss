@@ -1,0 +1,16 @@
+.nav {
+  position: fixed;
+  top: 5rem;
+  left: 5rem;
+
+  z-index: z('navigation');
+}
+
+.nav__list {
+  display: flex;
+  gap: 5rem;
+}
+
+.nav__item {
+  font-size: 4rem;
+}

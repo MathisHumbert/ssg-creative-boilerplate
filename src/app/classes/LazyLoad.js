@@ -1,10 +1,12 @@
 import Component from './Component';
 
-export default class AsyncLoad extends Component {
+export default class LazyLoad extends Component {
   constructor({ element }) {
     super({ element });
 
     this.element = element;
+    this.src = this.element.getAttribute('lazy-src');
+
     this.createObserver();
   }
 
@@ -12,9 +14,9 @@ export default class AsyncLoad extends Component {
     this.observer = new window.IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          const dataSrc = this.element.getAttribute('data-src');
-          if (!this.element.src && dataSrc) {
-            this.element.src = dataSrc;
+          if (!this.element.src && this.src) {
+            this.element.src = this.src;
+
             this.element.onload = () => {
               this.observer.unobserve(this.element);
             };

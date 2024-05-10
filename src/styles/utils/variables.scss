@@ -1,8 +1,11 @@
 $z-indexes: ('preloader', 'navigation', 'content', 'canvas');
 
-$_easings: (
-  ease-in-out: cubic-bezier(0.77, 0, 0.175, 1),
-);
+$ease-in-out: cubic-bezier(0.7, 0, 0.3, 1);
+$expo-in-out: cubic-bezier(0.9, 0, 0.1, 1);
+$ease-out: cubic-bezier(0.39, 0.575, 0.565, 1);
+$expo-out: cubic-bezier(0.19, 1, 0.22, 1);
+
+$font-satoshi: 'Satoshi';
 
 $breakpoints: (
   'phone': 768px,

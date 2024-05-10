@@ -1,17 +1,8 @@
-// @font-face {
-//   font-family: font(font1);
-//   src: url('../fonts/font1.woff2') format('woff2'),
-//     url('../fonts/font1.woff') format('woff');
-//   font-weight: normal;
-//   font-style: normal;
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: font(font2);
-//   src: url('../fonts/font2.woff2') format('woff2'),
-//     url('../fonts/font2.woff') format('woff');
-//   font-weight: normal;
-//   font-style: normal;
-//   font-display: swap;
-// }
+@font-face {
+  font-family: $font-satoshi;
+  src: url('../fonts/satoshi-medium.woff2') format('woff2'),
+    url('../fonts/satoshi-medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}

@@ -8,14 +8,17 @@
 html {
   @extend %cover;
 
-  @include media('<phone') {
-  }
-
+  font-size: calc(100vw / 1920 * 10);
+  font-family: $font-satoshi;
   position: fixed;
   overflow: hidden;
   overscroll-behavior: none;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
+
+  @include media('<phone') {
+    font-size: calc(100vw / 1000 * 10);
+  }
 }
 
 body {
@@ -46,4 +49,29 @@ canvas {
   height: 100%;
   pointer-events: none;
   z-index: z('canvas');
+}
+
+[data-animation='appear'] span {
+  will-change: opacity, visibility;
+}
+
+[data-animation='text'] span {
+  display: block;
+  overflow: hidden;
+
+  span {
+    display: inline-block;
+    vertical-align: top;
+    will-change: transform;
+  }
+}
+
+[data-animation='title'] {
+  overflow: hidden;
+
+  span {
+    display: inline-block;
+    vertical-align: top;
+    will-change: transform;
+  }
 }

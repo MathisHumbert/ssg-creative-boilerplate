@@ -20,11 +20,12 @@
   gap: 18px;
 
   h1 {
-    font-size: 42px;
+    font-size: 12rem;
   }
 
   a {
     color: plum;
+    font-size: 3rem;
   }
 }
 
@@ -34,10 +35,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-bottom: 20rem;
 
   .home__media {
-    width: 400px;
-    height: 400px;
-    border: 1px solid blue;
+    width: 90rem;
+    height: 90rem;
   }
 }

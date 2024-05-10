@@ -1,11 +1,14 @@
 doctype html
 html(lang="en")
   head
-    include _includes/partials/head.pug
+    include _includes/layouts/head.pug
+
+  include _includes/layouts/nav.pug
+
 
   body
-    include _includes/layouts/home.pug
-    include _includes/layouts/about.pug
+    include _includes/pages/home.pug
+    include _includes/pages/about.pug
 
   script.
       window.ASSETS = !{JSON.stringify([])}

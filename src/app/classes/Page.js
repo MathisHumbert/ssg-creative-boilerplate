@@ -5,11 +5,13 @@ import Prefix from 'prefix';
 import gsap from 'gsap';
 
 import { Detection } from '../classes/Detection';
-import AsyncLoad from '../classes/AsyncLoad';
+import LazyLoad from '../classes/LazyLoad';
 import { clamp, lerp } from '../utils/math';
-import { mapEach } from '../utils/dom';
+import { map } from '../utils/dom';
 
-import Highlight from '../animations/Highlight';
+import Appear from '../animations/Appear';
+import Text from '../animations/Text';
+import Title from '../animations/Title';
 
 export default class Page extends EventEmitter {
   constructor({ classes, id, element, elements, isScrollable = true }) {
@@ -22,10 +24,12 @@ export default class Page extends EventEmitter {
     this.selectors = {
       element,
       elements: {
-        preloaders: '[data-src]',
-        pagePreloaders: '[data-page-src]',
+        lazyLoaders: '[lazy-src]',
+        pagePreloaders: '[page-src]',
 
-        animationsHighlights: '[data-animation="highlight"]',
+        animationsAppears: '[data-animation="appear"]',
+        animationsTexts: '[data-animation="text"]',
+        animationsTitles: '[data-animation="title"]',
 
         ...elements,
       },
@@ -84,7 +88,7 @@ export default class Page extends EventEmitter {
 
     this.createAnimations();
     this.createObserver();
-    this.createPreloaders();
+    this.createLazyLoader();
   }
 
   /**
@@ -92,16 +96,31 @@ export default class Page extends EventEmitter {
    */
   createAnimations() {
     /**
-     * Highlight.
+     * Appear.
      */
-    this.animationsHighlight = mapEach(
-      this.elements.animationsHighlights,
-      (element) => {
-        return new Highlight({ element });
-      }
-    );
+    this.animationsAppear = map(this.elements.animationsAppears, (element) => {
+      return new Appear({ element });
+    });
 
-    this.animations.push(...this.animationsHighlight);
+    this.animations.push(...this.animationsAppear);
+
+    /**
+     * Text.
+     */
+    this.animationsText = map(this.elements.animationsTexts, (element) => {
+      return new Text({ element });
+    });
+
+    this.animations.push(...this.animationsText);
+
+    /**
+     * Title.
+     */
+    this.animationsTitle = map(this.elements.animationsTitles, (element) => {
+      return new Title({ element });
+    });
+
+    this.animations.push(...this.animationsTitle);
   }
 
   /**
@@ -132,11 +151,11 @@ export default class Page extends EventEmitter {
   /**
    * Loaders.
    */
-  createPreloaders() {
-    this.preloaders = mapEach(
+  createLazyLoader() {
+    this.preloaders = map(
       this.elements.preloaders,
       (element) =>
-        new AsyncLoad({
+        new LazyLoad({
           element,
         })
     );
@@ -147,13 +166,7 @@ export default class Page extends EventEmitter {
 
     this.imagesLoaded = true;
 
-    mapEach(this.elements.pagePreloaders, (img) => {
-      const src = img.getAttribute('data-page-src');
-
-      if (src) {
-        img.src = src;
-      }
-    });
+    map(this.elements.pagePreloaders, (element) => new PageLoad({ element }));
   }
 
   /**
@@ -184,12 +197,16 @@ export default class Page extends EventEmitter {
 
     this.addEventListeners();
 
-    gsap.set(document.documentElement, {
-      backgroundColor: this.element.getAttribute('data-background'),
-      color: this.element.getAttribute('data-color'),
-    });
+    return new Promise((res) => {
+      const animateIn = new gsap.timeline();
 
-    return Promise.resolve();
+      animateIn.set(document.documentElement, {
+        backgroundColor: this.element.getAttribute('data-background'),
+        color: this.element.getAttribute('data-color'),
+      });
+
+      res();
+    });
   }
 
   hide() {
@@ -197,7 +214,11 @@ export default class Page extends EventEmitter {
 
     each(this.animations, (animation) => animation.destroyAnimation());
 
-    return Promise.resolve();
+    return new Promise((res) => {
+      const animateOut = new gsap.timeline();
+
+      res();
+    });
   }
 
   transform(element, y) {

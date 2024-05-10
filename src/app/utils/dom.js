@@ -1,4 +1,5 @@
-import map from 'lodash/map';
+import lodashMap from 'lodash/map';
+import lodashEach from 'lodash/each';
 
 export const findAncestor = (element, selector) => {
   while (
@@ -32,10 +33,18 @@ export function getIndex(node) {
   return index;
 }
 
-export function mapEach(element, callback) {
+export function map(element, callback) {
   if (element instanceof window.HTMLElement) {
     return [callback(element)];
   }
 
-  return map(element, callback);
+  return lodashMap(element, callback);
+}
+
+export function each(element, callback) {
+  if (element instanceof window.HTMLElement) {
+    return [callback(element)];
+  }
+
+  return lodashEach(element, callback);
 }
