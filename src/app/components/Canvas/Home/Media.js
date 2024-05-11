@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
 
-import fragment from '../../shaders/fragment.glsl';
-import vertex from '../../shaders/vertex.glsl';
+import fragment from '../../../shaders/fragment.glsl';
+import vertex from '../../../shaders/vertex.glsl';
 
 export default class Media {
   constructor({ element, scene, geometry, screen, viewport }) {
@@ -15,7 +15,6 @@ export default class Media {
     this.scroll = 0;
     this.isVisible = false;
 
-    this.createTexture();
     this.createMaterial();
     this.createMesh();
 
@@ -25,17 +24,26 @@ export default class Media {
   /**
    * Create.
    */
-  createTexture() {}
 
   createMaterial() {
+    const texture = window.TEXTURES['texture.jpeg'];
+
     this.material = new THREE.RawShaderMaterial({
       fragmentShader: fragment,
       vertexShader: vertex,
       uniforms: {
         uAlpha: { value: 0 },
+        uTexture: { value: texture },
+        uResolution: {
+          value: new THREE.Vector2(this.screen.width, this.screen.height),
+        },
+        uImageResolution: {
+          value: new THREE.Vector2(texture.image.width, texture.image.height),
+        },
       },
+      depthTest: false,
+      depthWrite: false,
       transparent: true,
-      wireframe: true,
     });
   }
 
@@ -106,6 +114,11 @@ export default class Media {
   onResize({ screen, viewport }) {
     this.screen = screen;
     this.viewport = viewport;
+
+    this.material.uniforms.uResolution.value.set(
+      this.screen.width,
+      this.screen.height
+    );
 
     this.createBounds();
   }

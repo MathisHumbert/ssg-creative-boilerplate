@@ -26,11 +26,16 @@ export default class Preloader extends Component {
     const textureLoader = new THREE.TextureLoader();
 
     const preloadTextures = Promise.all(
-      window.ASSETS.map(
+      [...window.ASSETS, 'texture.jpeg'].map(
         (image) =>
           new Promise((resolve) => {
             textureLoader.load(image, (texture) => {
+              texture.generateMipmaps = false;
+              texture.minFilter = THREE.LinearFilter;
+              texture.needsUpdate = true;
+
               window.TEXTURES[image] = texture;
+
               resolve();
             });
           })
@@ -38,7 +43,7 @@ export default class Preloader extends Component {
     );
 
     Promise.all([preloadImages, preloadTextures]).then(() => {
-      this.onLoaded();
+      this.emit('loaded');
     });
   }
 

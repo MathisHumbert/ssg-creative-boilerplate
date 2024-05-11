@@ -1,14 +1,14 @@
 import * as THREE from 'three';
 
-import Media from '../Media';
+import Media from './Media';
 
 export default class Home {
-  constructor({ scene, geometry, screen, viewport }) {
+  constructor({ scene, screen, viewport }) {
     this.scene = scene;
-    this.geometry = geometry;
     this.screen = screen;
     this.viewport = viewport;
 
+    this.geometry = new THREE.PlaneGeometry(1, 1, 16, 16);
     this.group = new THREE.Group();
 
     this.createMedia();
@@ -30,13 +30,17 @@ export default class Home {
   show() {
     this.scene.add(this.group);
 
-    this.media.show();
+    if (this.media && this.media.show) {
+      this.media.show();
+    }
   }
 
   hide() {
     this.scene.remove(this.group);
 
-    this.media.hide();
+    if (this.media && this.media.hide) {
+      this.media.hide();
+    }
   }
 
   /**

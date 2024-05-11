@@ -10,7 +10,6 @@ export default class Canvas {
     this.createScene();
     this.createCamera();
     this.createRender();
-    this.createGeometry();
 
     this.onResize();
   }
@@ -44,17 +43,12 @@ export default class Canvas {
     document.body.appendChild(this.renderer.domElement);
   }
 
-  createGeometry() {
-    this.geometry = new THREE.PlaneGeometry(1, 1, 16, 16);
-  }
-
   /**
    * Home.
    */
   createHome() {
     this.home = new Home({
       scene: this.scene,
-      geometry: this.geometry,
       screen: this.screen,
       viewport: this.viewport,
     });
@@ -66,7 +60,6 @@ export default class Canvas {
   createAbout() {
     this.about = new About({
       scene: this.scene,
-      geometry: this.geometry,
       screen: this.screen,
       viewport: this.viewport,
     });
@@ -142,13 +135,13 @@ export default class Canvas {
   /**
    * Loop.
    */
-  update(scroll) {
+  update(scroll, time) {
     if (this.home && this.home.update) {
       this.home.update(scroll);
     }
 
     if (this.about && this.about.update) {
-      this.about.update(scroll);
+      this.about.update(scroll, time);
     }
 
     this.renderer.render(this.scene, this.camera);

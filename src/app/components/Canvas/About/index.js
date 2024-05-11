@@ -1,24 +1,22 @@
 import * as THREE from 'three';
 
-import Media from '../Media';
+import Cube from './Cube';
 
 export default class About {
-  constructor({ scene, geometry, screen, viewport }) {
+  constructor({ scene, screen, viewport }) {
     this.scene = scene;
-    this.geometry = geometry;
     this.screen = screen;
     this.viewport = viewport;
 
     this.group = new THREE.Group();
 
-    this.createMedia();
+    this.createCube();
   }
 
-  createMedia() {
-    this.media = new Media({
+  createCube() {
+    this.cube = new Cube({
       element: document.querySelector('.about__media'),
       scene: this.group,
-      geometry: this.geometry,
       screen: this.screen,
       viewport: this.viewport,
     });
@@ -30,30 +28,37 @@ export default class About {
   show() {
     this.scene.add(this.group);
 
-    this.media.show();
+    if (this.cube && this.cube.show) {
+      this.cube.show();
+    }
   }
 
   hide() {
     this.scene.remove(this.group);
 
-    this.media.hide();
+    if (this.cube && this.cube.hide) {
+      this.cube.hide();
+    }
   }
 
   /**
    * Events.
    */
   onResize({ screen, viewport }) {
-    if (this.media && this.media.onResize) {
-      this.media.onResize({ screen, viewport });
+    this.screen = screen;
+    this.viewport = viewport;
+
+    if (this.cube && this.cube.onResize) {
+      this.cube.onResize({ screen, viewport });
     }
   }
 
   /**
    * Loop.
    */
-  update(scroll) {
-    if (this.media && this.media.update) {
-      this.media.update(scroll);
+  update(scroll, time) {
+    if (this.cube && this.cube.update) {
+      this.cube.update(scroll, time);
     }
   }
 }
