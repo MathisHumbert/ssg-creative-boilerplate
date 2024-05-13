@@ -46,9 +46,4 @@ export default class Preloader extends Component {
       this.emit('loaded');
     });
   }
-
-  onLoaded() {
-    // this.element.remove();
-    this.emit('loaded');
-  }
 }
