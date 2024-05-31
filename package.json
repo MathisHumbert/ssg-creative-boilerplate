@@ -18,8 +18,8 @@
     "html-minifier": "^4.0.0",
     "pug": "^3.0.2",
     "sass": "^1.66.1",
-    "vite": "^4.4.5",
-    "vite-plugin-glslify": "^2.0.2"
+    "vite": "^5.2.9",
+    "vite-plugin-glslify": "^2.1.0"
   },
   "dependencies": {
     "auto-bind": "^5.0.1",
