@@ -12,6 +12,7 @@ import * as THREE from 'three';
 
 import Canvas from './components/Canvas';
 import Preloader from './components/Preloader';
+import Grid from './components/Grid';
 
 import Home from './pages/Home';
 import About from './pages/About';
@@ -29,6 +30,7 @@ class App {
 
     if (import.meta.env.VITE_DEV_MODE) {
       this.createStats();
+      this.createGrid();
     }
 
     AutoBind(this);
@@ -102,6 +104,13 @@ class App {
     this.stats.showPanel(0);
 
     document.body.appendChild(this.stats.dom);
+  }
+
+  createGrid() {
+    new Grid({
+      desktop: { count: 12, margin: 32, gutter: 20 },
+      mobile: { count: 4, margin: 24, gutter: 20 },
+    });
   }
 
   /**
