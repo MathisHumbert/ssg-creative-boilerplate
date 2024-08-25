@@ -61,5 +61,5 @@ export function each(element, callback) {
 
   const nodes = toArray(element);
 
-  return nodes.map(callback);
+  return nodes.forEach(callback);
 }
