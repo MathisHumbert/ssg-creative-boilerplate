@@ -35,7 +35,7 @@ export default class Media {
         uAlpha: { value: 0 },
         uTexture: { value: texture },
         uResolution: {
-          value: new THREE.Vector2(this.screen.width, this.screen.height),
+          value: new THREE.Vector2(),
         },
         uImageResolution: {
           value: new THREE.Vector2(texture.image.width, texture.image.height),
@@ -75,6 +75,11 @@ export default class Media {
       (this.viewport.width * this.bounds.width) / this.screen.width;
     this.mesh.scale.y =
       (this.viewport.height * this.bounds.height) / this.screen.height;
+
+    this.material.uniforms.uResolution.value.set(
+      this.mesh.scale.x,
+      this.mesh.scale.y
+    );
   }
 
   updateX(x = 0) {
@@ -114,11 +119,6 @@ export default class Media {
   onResize({ screen, viewport }) {
     this.screen = screen;
     this.viewport = viewport;
-
-    this.material.uniforms.uResolution.value.set(
-      this.screen.width,
-      this.screen.height
-    );
 
     this.createBounds();
   }

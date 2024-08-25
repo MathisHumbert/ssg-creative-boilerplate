@@ -1,4 +1,4 @@
-import Component from './Component';
+import Component from '../classes/Component';
 
 export default class PageLoad extends Component {
   constructor({ element }) {

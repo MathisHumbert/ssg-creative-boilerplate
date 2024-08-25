@@ -25,16 +25,15 @@
     "auto-bind": "^5.0.1",
     "events": "^3.3.0",
     "fontfaceobserver": "^2.3.0",
-    "gsap": "^3.12.2",
+    "gsap": "^3.12.5",
     "imagesloaded": "^5.0.0",
     "include-media": "^2.0.0",
-    "lodash": "^4.17.21",
     "nodelist-foreach-polyfill": "^1.2.0",
     "normalize-wheel": "^1.0.1",
     "prefix": "^1.0.0",
     "split-type": "^0.3.4",
     "stats.js": "^0.17.0",
-    "three": "^0.156.1",
+    "three": "^0.167.1",
     "ua-parser-js": "^1.0.36"
   }
 }

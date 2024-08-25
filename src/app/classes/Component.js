@@ -29,7 +29,7 @@ export default class Component extends EventEmitter {
 
     this.elements = {};
 
-    each(this.selectorChildren, (entry, key) => {
+    each(this.selectorChildren, ([key, entry]) => {
       if (
         entry instanceof window.HTMLElement ||
         entry instanceof window.NodeList ||

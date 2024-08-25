@@ -6,7 +6,7 @@ import FontFaceObserver from 'fontfaceobserver';
 import AutoBind from 'auto-bind';
 import NormalizeWheel from 'normalize-wheel';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/all';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Stats from 'stats.js';
 import * as THREE from 'three';
 
@@ -28,7 +28,7 @@ class App {
     this.clock = new THREE.Clock();
     this.odlElapsedTime = 0;
 
-    if (import.meta.env.VITE_DEV_MODE) {
+    if (import.meta.env.VITE_DEV_MODE === 'true') {
       this.createStats();
       this.createGrid();
     }
@@ -125,6 +125,7 @@ class App {
 
     this.canvas.onPreloaded();
 
+    this.page.createPageLoader();
     this.page.show();
   }
 
@@ -163,6 +164,7 @@ class App {
 
     this.canvas.onChangeEnd(this.template);
 
+    this.page.createPageLoader();
     this.page.show();
 
     this.onResize();

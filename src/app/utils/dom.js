@@ -1,5 +1,16 @@
-import lodashMap from 'lodash/map';
-import lodashEach from 'lodash/each';
+const toArray = (element) => {
+  if (element == null) {
+    return [];
+  } else if (Array.isArray(element)) {
+    return element;
+  } else if (element instanceof NodeList || element instanceof HTMLCollection) {
+    return Array.from(element);
+  } else if (typeof element === 'object') {
+    return Object.entries(element);
+  } else {
+    return [element];
+  }
+};
 
 export const findAncestor = (element, selector) => {
   while (
@@ -38,7 +49,9 @@ export function map(element, callback) {
     return [callback(element)];
   }
 
-  return lodashMap(element, callback);
+  const nodes = toArray(element);
+
+  return nodes.map(callback);
 }
 
 export function each(element, callback) {
@@ -46,5 +59,7 @@ export function each(element, callback) {
     return [callback(element)];
   }
 
-  return lodashEach(element, callback);
+  const nodes = toArray(element);
+
+  return nodes.map(callback);
 }

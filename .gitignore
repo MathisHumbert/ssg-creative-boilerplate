@@ -7,11 +7,12 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 yarn.lock
+pnpm-lock.yaml
 
 node_modules
-dist
 _site
 dist-ssr
+dist
 *.local
 
 # Editor directories and files
