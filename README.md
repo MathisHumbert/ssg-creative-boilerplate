@@ -1,6 +1,6 @@
 ## Mathis Humbert
 
-A boilerplate template for creative websites using JavaScript (OOP) with no framework, WebGL via THREE and GSAP, working with 11ty for SSG.
+A boilerplate template for creative websites using JavaScript (OOP) with no framework, WebGL via THREE or OGL and GSAP, working with 11ty for SSG.
 
 ### Description
 
@@ -8,7 +8,7 @@ This boilerplate is a modern version of "bizarroilerplate" that you can find ove
 
 I changed some part of this template bases for my own use.
 
-I replaced Webpack with Vite.js, replaced OGL with THREE for 3D and updated all of the packages to have an up to date template.
+I replaced Webpack with Vite.js and updated all of the packages to have an up to date template.
 
 I also replace SSR with SSG to create a static website, I'm using eleventy for this part.
 

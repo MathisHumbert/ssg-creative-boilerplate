@@ -37,7 +37,7 @@ module.exports = function (eleventyConfig) {
   return {
     dir: {
       input: 'src/views',
-      output: '_site',
+      output: 'dist',
       includes: '_includes',
       data: '_data',
     },

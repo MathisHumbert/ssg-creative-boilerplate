@@ -4,21 +4,21 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "clean": "rm -rf _site",
-    "dev": "yarn run clean && eleventy --config=.eleventy.cjs --serve --incremental",
-    "build": "yarn run clean && eleventy --config=.eleventy.cjs"
+    "clean": "rm -rf dist",
+    "dev": "pnpm run clean && eleventy --config=.eleventy.cjs --serve --incremental",
+    "build": "pnpm run clean && eleventy --config=.eleventy.cjs"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
     "@11ty/eleventy-plugin-vite": "^4.0.0",
-    "@prismicio/client": "^7.2.0",
+    "@prismicio/client": "^7.8.1",
     "@prismicio/helpers": "^2.3.9",
     "axios": "^1.5.0",
-    "dotenv": "^16.3.1",
+    "dotenv": "^16.4.5",
     "html-minifier": "^4.0.0",
-    "pug": "^3.0.2",
-    "sass": "^1.66.1",
-    "vite": "^5.2.9",
+    "pug": "^3.0.3",
+    "sass": "^1.78.0",
+    "vite": "^5.4.3",
     "vite-plugin-glslify": "^2.1.0"
   },
   "dependencies": {
@@ -28,12 +28,12 @@
     "gsap": "^3.12.5",
     "imagesloaded": "^5.0.0",
     "include-media": "^2.0.0",
-    "nodelist-foreach-polyfill": "^1.2.0",
     "normalize-wheel": "^1.0.1",
+    "ogl": "^1.0.8",
     "prefix": "^1.0.0",
     "split-type": "^0.3.4",
     "stats.js": "^0.17.0",
     "three": "^0.167.1",
-    "ua-parser-js": "^1.0.36"
+    "ua-parser-js": "^1.0.38"
   }
 }
