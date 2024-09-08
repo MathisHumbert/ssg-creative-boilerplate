@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "clean": "rm -rf dist",
+    "clean": "rm -rf _site",
     "dev": "pnpm run clean && eleventy --config=.eleventy.cjs --serve --incremental",
     "build": "pnpm run clean && eleventy --config=.eleventy.cjs"
   },
