@@ -15,6 +15,7 @@ import Preloader from './components/Preloader';
 import Grid from './components/Grid';
 
 import Clock from './classes/Clock';
+import Responsive from './classes/Responsive';
 
 import Home from './pages/Home';
 import About from './pages/About';
@@ -42,6 +43,7 @@ class App {
   }
 
   init() {
+    this.createResponsive();
     this.createCanvas();
     this.createPreloader();
 
@@ -55,9 +57,15 @@ class App {
     this.canvas = null;
 
     if (this.webglLibrary === 'three') {
-      this.canvas = new ThreeCanvas({ template: this.template });
+      this.canvas = new ThreeCanvas({
+        template: this.template,
+        size: this.responsive.size,
+      });
     } else {
-      this.canvas = new OglCanvas({ template: this.template });
+      this.canvas = new OglCanvas({
+        template: this.template,
+        size: this.responsive.size,
+      });
     }
   }
 
@@ -101,8 +109,8 @@ class App {
         return {
           top: 0,
           left: 0,
-          width: window.innerWidth,
-          height: window.innerHeight,
+          width: this.page.size.width,
+          height: this.page.size.height,
         };
       },
     });
@@ -123,6 +131,10 @@ class App {
       desktop: { count: 12, margin: 32, gutter: 20 },
       mobile: { count: 4, margin: 24, gutter: 20 },
     });
+  }
+
+  createResponsive() {
+    this.responsive = new Responsive();
   }
 
   /**
@@ -185,13 +197,17 @@ class App {
   }
 
   onResize() {
+    if (this.responsive && this.responsive.onResize) {
+      this.responsive.onResize();
+    }
+
     if (this.page && this.page.onResize) {
-      this.page.onResize();
+      this.page.onResize(this.responsive.size, this.responsive.fontSize);
     }
 
     window.requestAnimationFrame(() => {
       if (this.canvas && this.canvas.onResize) {
-        this.canvas.onResize();
+        this.canvas.onResize(this.responsive.size);
       }
     });
   }

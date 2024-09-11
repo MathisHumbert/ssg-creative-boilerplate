@@ -44,6 +44,8 @@ export default class Page extends EventEmitter {
       limit: 0,
       ease: 0.1,
     };
+    this.fontSize = 0;
+    this.size = { width: 0, height: 0 };
 
     this.transformPrefix = Prefix('transform');
 
@@ -82,7 +84,7 @@ export default class Page extends EventEmitter {
         position: 0,
         current: 0,
         target: 0,
-        limit: this.elements.wrapper.clientHeight - window.innerHeight,
+        limit: this.elements.wrapper.clientHeight - this.size.height,
         ease: 0.1,
       };
     }
@@ -141,7 +143,7 @@ export default class Page extends EventEmitter {
       if (shouldUpdateLimit) {
         window.requestAnimationFrame(() => {
           this.scroll.limit =
-            this.elements.wrapper.clientHeight - window.innerHeight;
+            this.elements.wrapper.clientHeight - this.size.height;
         });
       }
     });
@@ -231,12 +233,14 @@ export default class Page extends EventEmitter {
   /**
    * Events.
    */
-  onResize() {
+  onResize(size, fontSize) {
     if (!this.elements.wrapper) return;
 
+    this.fontSize = fontSize;
+    this.size = size;
+
     window.requestAnimationFrame(() => {
-      this.scroll.limit =
-        this.elements.wrapper.clientHeight - window.innerHeight;
+      this.scroll.limit = this.elements.wrapper.clientHeight - this.size.height;
 
       each(this.animations, (animation) => {
         if (animation.onResize) {

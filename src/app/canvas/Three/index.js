@@ -4,14 +4,15 @@ import Home from './Home';
 import About from './About';
 
 export default class Canvas {
-  constructor({ template }) {
+  constructor({ template, size }) {
     this.template = template;
+    this.screen = size;
 
     this.createScene();
     this.createCamera();
     this.createRender();
 
-    this.onResize();
+    this.onResize(size);
   }
 
   /**
@@ -24,7 +25,7 @@ export default class Canvas {
   createCamera() {
     this.camera = new THREE.PerspectiveCamera(
       45,
-      window.innerWidth / window.innerHeight,
+      this.screen.width / this.screen.height,
       0.1,
       100
     );
@@ -37,7 +38,7 @@ export default class Canvas {
       antialias: true,
     });
 
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setSize(this.screen.width, this.screen.height);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     document.body.appendChild(this.renderer.domElement);
@@ -97,11 +98,8 @@ export default class Canvas {
     this.template = template;
   }
 
-  onResize() {
-    this.screen = {
-      width: window.innerWidth,
-      height: window.innerHeight,
-    };
+  onResize(size) {
+    this.screen = size;
 
     this.renderer.setSize(this.screen.width, this.screen.height);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));

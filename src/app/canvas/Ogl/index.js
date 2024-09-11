@@ -5,15 +5,16 @@ import About from './About';
 import postFragment from '../../shaders/post-fragment.glsl';
 
 export default class Canvas {
-  constructor({ template }) {
+  constructor({ template, size }) {
     this.template = template;
+    this.screen = size;
 
     this.createRender();
     this.createScene();
     this.createCamera();
     this.createPost();
 
-    this.onResize();
+    this.onResize(size);
   }
 
   /**
@@ -25,7 +26,7 @@ export default class Canvas {
       dpr: Math.min(window.devicePixelRatio, 2),
     });
     this.gl = this.renderer.gl;
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+    this.renderer.setSize(this.screen.width, this.screen.height);
 
     document.body.appendChild(this.gl.canvas);
   }
@@ -37,7 +38,7 @@ export default class Canvas {
   createCamera() {
     this.camera = new Camera(this.gl, {
       fov: 45,
-      aspect: window.innerWidth / window.innerHeight,
+      aspect: this.screen.width / this.screen.height,
       near: 0.1,
       far: 100,
     });
@@ -110,11 +111,8 @@ export default class Canvas {
     this.template = template;
   }
 
-  onResize() {
-    this.screen = {
-      width: window.innerWidth,
-      height: window.innerHeight,
-    };
+  onResize(size) {
+    this.screen = size;
 
     this.renderer.setSize(this.screen.width, this.screen.height);
     this.renderer.dpr = Math.min(window.devicePixelRatio, 2);
