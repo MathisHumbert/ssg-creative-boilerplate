@@ -109,8 +109,8 @@ class App {
         return {
           top: 0,
           left: 0,
-          width: this.page.size.width,
-          height: this.page.size.height,
+          width: window.innerWidth,
+          height: window.innerHeight,
         };
       },
     });

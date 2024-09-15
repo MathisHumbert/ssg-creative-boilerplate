@@ -5,8 +5,11 @@ export default class Responsive {
     this.size = { width: 0, height: 0 };
     this.breakpoints = {
       phone: 768,
-      tablet: 1024,
       desktop: 1920,
+    };
+    this.sizes = {
+      phone: 375,
+      desktop: 1600,
     };
 
     this.onResize();
@@ -20,12 +23,10 @@ export default class Responsive {
       height: window.innerHeight,
     };
 
-    if (this.size.width > this.breakpoints.desktop) {
-      width = this.breakpoints.desktop;
-    } else if (this.size.width >= this.breakpoints.tablet) {
-      width = this.breakpoints.tablet;
+    if (this.size.width > this.sizes.phone) {
+      width = this.sizes.desktop;
     } else {
-      width = this.breakpoints.phone;
+      width = this.sizes.phone;
     }
 
     this.fontSize = (this.size.width / width) * this.multiplier;
