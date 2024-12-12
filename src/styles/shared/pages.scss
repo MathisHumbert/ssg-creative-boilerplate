@@ -1,17 +1,14 @@
 %page {
-  @extend %cover;
-
+  position: relative;
+  width: 100%;
+  height: 100%;
+  color: inherit;
   opacity: 0;
   visibility: hidden;
+  display: none;
   z-index: z('content');
 }
 
 %page--active {
-  opacity: 1;
-  visibility: visible;
-}
-
-%page__wrapper {
-  color: inherit;
-  will-change: transform;
+  display: block;
 }

@@ -1,14 +1,13 @@
 import Page from '../../classes/Page';
 
 export default class About extends Page {
-  constructor() {
+  constructor({ responsive }) {
     super({
       id: 'about',
       classes: { active: 'about--active' },
       element: '.about',
-      elements: {
-        wrapper: '.about__wrapper',
-      },
+      elements: {},
+      responsive,
     });
   }
 

@@ -1,15 +1,15 @@
-import { Transform } from 'ogl';
+import * as THREE from 'three';
 
 import Media from './Media';
 
 export default class Home {
-  constructor({ gl, scene, screen, viewport }) {
-    this.gl = gl;
+  constructor({ scene, screen, viewport }) {
     this.scene = scene;
     this.screen = screen;
     this.viewport = viewport;
 
-    this.group = new Transform();
+    this.geometry = new THREE.PlaneGeometry(1, 1, 16, 16);
+    this.group = new THREE.Group();
 
     this.createMedia();
   }
@@ -17,8 +17,8 @@ export default class Home {
   createMedia() {
     this.media = new Media({
       element: document.querySelector('.home__media'),
-      gl: this.gl,
       scene: this.group,
+      geometry: this.geometry,
       screen: this.screen,
       viewport: this.viewport,
     });
@@ -28,7 +28,7 @@ export default class Home {
    * Animations.
    */
   show() {
-    this.group.setParent(this.scene);
+    this.scene.add(this.group);
 
     if (this.media && this.media.show) {
       this.media.show();
@@ -36,11 +36,17 @@ export default class Home {
   }
 
   hide() {
-    this.scene.removeChild(this.group);
+    let promise;
 
     if (this.media && this.media.hide) {
-      this.media.hide();
+      promise = this.media.hide();
     }
+
+    promise.then(() => {
+      this.scene.remove(this.group);
+    });
+
+    return promise;
   }
 
   /**

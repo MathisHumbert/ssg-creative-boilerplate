@@ -1,18 +1,16 @@
-import { Renderer, Camera, Transform, Vec2, Post } from 'ogl';
+import * as THREE from 'three';
 
 import Home from './Home';
 import About from './About';
-import postFragment from '../../shaders/post-fragment.glsl';
 
 export default class Canvas {
   constructor({ template, size }) {
     this.template = template;
     this.screen = size;
 
-    this.createRender();
     this.createScene();
     this.createCamera();
-    this.createPost();
+    this.createRender();
 
     this.onResize(size);
   }
@@ -20,39 +18,30 @@ export default class Canvas {
   /**
    * THREE.
    */
-  createRender() {
-    this.renderer = new Renderer({
-      alpha: true,
-      dpr: Math.min(window.devicePixelRatio, 2),
-    });
-    this.gl = this.renderer.gl;
-    this.renderer.setSize(this.screen.width, this.screen.height);
-
-    document.body.appendChild(this.gl.canvas);
-  }
-
   createScene() {
-    this.scene = new Transform();
+    this.scene = new THREE.Scene();
   }
 
   createCamera() {
-    this.camera = new Camera(this.gl, {
-      fov: 45,
-      aspect: this.screen.width / this.screen.height,
-      near: 0.1,
-      far: 100,
-    });
+    this.camera = new THREE.PerspectiveCamera(
+      45,
+      this.screen.width / this.screen.height,
+      0.1,
+      100
+    );
     this.camera.position.z = 5;
   }
 
-  createPost() {
-    this.post = new Post(this.gl);
-    this.pass = this.post.addPass({
-      fragment: postFragment,
-      uniforms: {
-        uResolution: { value: new Vec2() },
-      },
+  createRender() {
+    this.renderer = new THREE.WebGLRenderer({
+      alpha: true,
+      antialias: true,
     });
+
+    this.renderer.setSize(this.screen.width, this.screen.height);
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    document.body.appendChild(this.renderer.domElement);
   }
 
   /**
@@ -60,7 +49,6 @@ export default class Canvas {
    */
   createHome() {
     this.home = new Home({
-      gl: this.gl,
       scene: this.scene,
       screen: this.screen,
       viewport: this.viewport,
@@ -72,7 +60,6 @@ export default class Canvas {
    */
   createAbout() {
     this.about = new About({
-      gl: this.gl,
       scene: this.scene,
       screen: this.screen,
       viewport: this.viewport,
@@ -86,20 +73,24 @@ export default class Canvas {
     this.createHome();
     this.createAbout();
 
-    this.onChangeEnd(this.template);
+    this.show(this.template);
   }
 
-  onChangeStart() {
+  hide() {
+    let promise;
+
     if (this.template === '/') {
-      this.home.hide();
+      promise = this.home.hide();
     }
 
     if (this.template === '/about') {
-      this.about.hide();
+      promise = this.about.hide();
     }
+
+    return promise;
   }
 
-  onChangeEnd(template) {
+  show(template) {
     if (template === '/') {
       this.home.show();
     }
@@ -115,20 +106,14 @@ export default class Canvas {
     this.screen = size;
 
     this.renderer.setSize(this.screen.width, this.screen.height);
-    this.renderer.dpr = Math.min(window.devicePixelRatio, 2);
-    this.camera.perspective({
-      aspect: this.screen.width / this.screen.height,
-    });
+    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    this.camera.aspect = this.screen.width / this.screen.height;
+    this.camera.updateProjectionMatrix();
 
     const fov = this.camera.fov * (Math.PI / 180);
     const height = 2 * Math.tan(fov / 2) * this.camera.position.z;
     const width = height * this.camera.aspect;
-
-    this.post.resize();
-    this.pass.uniforms.uResolution.value.set(
-      this.screen.width,
-      this.screen.height
-    );
 
     this.viewport = { width, height };
 
@@ -161,7 +146,6 @@ export default class Canvas {
       this.about.update(scroll, time);
     }
 
-    // this.renderer.render({ scene: this.scene, camera: this.camera });
-    this.post.render({ scene: this.scene, camera: this.camera });
+    this.renderer.render(this.scene, this.camera);
   }
 }

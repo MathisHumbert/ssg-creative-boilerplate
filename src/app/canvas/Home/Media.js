@@ -1,14 +1,14 @@
-import { Program, Vec2, Mesh, Plane } from 'ogl';
+import * as THREE from 'three';
 import gsap from 'gsap';
 
-import fragment from '../../../shaders/fragment.glsl';
-import vertex from '../../../shaders/vertex.glsl';
+import fragment from '../../shaders/fragment.glsl';
+import vertex from '../../shaders/vertex.glsl';
 
 export default class Media {
-  constructor({ element, gl, scene, screen, viewport }) {
+  constructor({ element, scene, geometry, screen, viewport }) {
     this.element = element;
-    this.gl = gl;
     this.scene = scene;
+    this.geometry = geometry;
     this.screen = screen;
     this.viewport = viewport;
 
@@ -22,23 +22,23 @@ export default class Media {
   }
 
   /**
-   * Create.   */
+   * Create.
+   */
 
   createMaterial() {
     const texture = window.TEXTURES['texture.jpeg'];
 
-    this.material = new Program(this.gl, {
-      fragment,
-      vertex,
+    this.material = new THREE.RawShaderMaterial({
+      fragmentShader: fragment,
+      vertexShader: vertex,
       uniforms: {
         uAlpha: { value: 0 },
         uTexture: { value: texture },
-        uResolution: { value: new Vec2(0) },
+        uResolution: {
+          value: new THREE.Vector2(),
+        },
         uImageResolution: {
-          value: new Vec2(
-            texture.image.naturalWidth,
-            texture.image.naturalHeight
-          ),
+          value: new THREE.Vector2(texture.image.width, texture.image.height),
         },
       },
       depthTest: false,
@@ -48,16 +48,8 @@ export default class Media {
   }
 
   createMesh() {
-    this.geometry = new Plane(this.gl, {
-      widthSegments: 16,
-      heightSegments: 16,
-    });
-
-    this.mesh = new Mesh(this.gl, {
-      geometry: this.geometry,
-      program: this.material,
-    });
-    this.mesh.setParent(this.scene);
+    this.mesh = new THREE.Mesh(this.geometry, this.material);
+    this.scene.add(this.mesh);
   }
 
   createBounds() {
@@ -114,10 +106,14 @@ export default class Media {
   }
 
   hide() {
-    this.isVisible = false;
+    return new Promise((res) => {
+      this.isVisible = false;
 
-    gsap.to(this.material.uniforms.uAlpha, {
-      value: 0,
+      gsap.set(this.material.uniforms.uAlpha, {
+        value: 0,
+      });
+
+      res();
     });
   }
 

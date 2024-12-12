@@ -10,11 +10,21 @@ html {
 
   font-size: calc(100vw / 1920 * 10);
   font-family: $font-satoshi;
-  position: fixed;
-  overflow: hidden;
-  overscroll-behavior: none;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
+
+  background: $color-black;
+  color: $color-white;
+
+  // Comment to show scrollbar
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &-webkit-scrollbar {
+    display: none;
+  }
 
   @include media('<phone') {
     font-size: calc(100vw / 1000 * 10);
@@ -22,9 +32,24 @@ html {
 }
 
 body {
-  @extend %cover;
+  position: relative;
+}
 
-  position: fixed;
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
 }
 
 a {

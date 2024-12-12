@@ -1,12 +1,10 @@
 import autoBind from 'auto-bind';
 import EventEmitter from 'events';
-import Prefix from 'prefix';
 import gsap from 'gsap';
 
-import { Detection } from './Detection';
 import LazyLoad from './LazyLoad';
 import PageLoad from './PageLoad';
-import { clamp, lerp } from '../utils/math';
+
 import { map, each } from '../utils/dom';
 
 import Appear from '../animations/Appear';
@@ -14,7 +12,7 @@ import Text from '../animations/Text';
 import Title from '../animations/Title';
 
 export default class Page extends EventEmitter {
-  constructor({ classes, id, element, elements, isScrollable = true }) {
+  constructor({ classes, id, element, elements, responsive }) {
     super();
 
     autoBind(this);
@@ -34,20 +32,10 @@ export default class Page extends EventEmitter {
         ...elements,
       },
     };
-    this.isScrollable = isScrollable;
-    this.preventScroll = false;
 
-    this.scroll = {
-      position: 0,
-      current: 0,
-      target: 0,
-      limit: 0,
-      ease: 0.1,
-    };
-    this.fontSize = 0;
-    this.size = { width: 0, height: 0 };
-
-    this.transformPrefix = Prefix('transform');
+    this.fontSize = responsive.fontSize;
+    this.size = responsive.size;
+    this.scroll = 0;
 
     this.isVisible = false;
 
@@ -79,19 +67,9 @@ export default class Page extends EventEmitter {
       }
     });
 
-    if (this.isScrollable) {
-      this.scroll = {
-        position: 0,
-        current: 0,
-        target: 0,
-        limit: this.elements.wrapper.clientHeight - this.size.height,
-        ease: 0.1,
-      };
-    }
-
     this.createAnimations();
-    this.createObserver();
     this.createLazyLoader();
+    this.addEventListeners();
   }
 
   /**
@@ -127,31 +105,6 @@ export default class Page extends EventEmitter {
   }
 
   /**
-   * Observer.
-   */
-  createObserver() {
-    this.observer = new window.ResizeObserver((entries) => {
-      let shouldUpdateLimit = false;
-
-      for (const _entry of entries) {
-        if (_entry.target === this.elements.wrapper) {
-          shouldUpdateLimit = true;
-          break;
-        }
-      }
-
-      if (shouldUpdateLimit) {
-        window.requestAnimationFrame(() => {
-          this.scroll.limit =
-            this.elements.wrapper.clientHeight - this.size.height;
-        });
-      }
-    });
-
-    this.observer.observe(this.elements.wrapper);
-  }
-
-  /**
    * Loaders.
    */
   createLazyLoader() {
@@ -175,40 +128,26 @@ export default class Page extends EventEmitter {
   /**
    * Animations.
    */
-  reset() {
-    this.scroll = {
-      position: 0,
-      current: 0,
-      target: 0,
-      limit: 0,
-      ease: 0.1,
-    };
-  }
-
-  set(value) {
-    this.scroll.current = this.scroll.target = this.scroll.last = value;
-
-    this.transform(this.elements.wrapper, this.scroll.current);
-  }
 
   show() {
-    this.reset();
+    this.lenis.scrollTo(0, { immediate: true, force: true });
+    this.scroll = 0;
 
     each(this.animations, (animation) => animation.createAnimation());
 
-    this.isVisible = true;
-
-    this.addEventListeners();
-
     return new Promise((res) => {
-      const animateIn = new gsap.timeline();
+      const tl = gsap.timeline();
 
-      animateIn.set(document.documentElement, {
+      tl.set(document.documentElement, {
         backgroundColor: this.element.getAttribute('data-background'),
         color: this.element.getAttribute('data-color'),
-      });
-
-      res();
+      })
+        .set(this.element, { autoAlpha: 1 }, 0)
+        .call(() => {
+          this.lenis.start();
+          this.isVisible = true;
+          res();
+        });
     });
   }
 
@@ -218,30 +157,20 @@ export default class Page extends EventEmitter {
     each(this.animations, (animation) => animation.destroyAnimation());
 
     return new Promise((res) => {
-      const animateOut = new gsap.timeline();
+      const tl = gsap.timeline();
 
-      res();
+      tl.set(this.element, { autoAlpha: 0 }).call(() => res());
     });
-  }
-
-  transform(element, y) {
-    element.style[this.transformPrefix] = `translate3d(0, ${-Math.round(
-      y
-    )}px, 0)`;
   }
 
   /**
    * Events.
    */
   onResize(size, fontSize) {
-    if (!this.elements.wrapper) return;
-
     this.fontSize = fontSize;
     this.size = size;
 
     window.requestAnimationFrame(() => {
-      this.scroll.limit = this.elements.wrapper.clientHeight - this.size.height;
-
       each(this.animations, (animation) => {
         if (animation.onResize) {
           animation.onResize();
@@ -250,44 +179,14 @@ export default class Page extends EventEmitter {
     });
   }
 
-  onTouchDown(event) {
-    if (!Detection.isMobile || !this.isVisible || this.preventScroll) return;
+  onTouchDown(event) {}
 
-    this.isDown = true;
+  onTouchMove(event) {}
 
-    this.scroll.position = this.scroll.current;
-    this.start = event.touches ? event.touches[0].clientY : event.clientY;
-  }
+  onTouchUp() {}
 
-  onTouchMove(event) {
-    if (
-      !Detection.isMobile ||
-      !this.isDown ||
-      !this.isVisible ||
-      this.preventScroll
-    )
-      return;
-
-    const y = event.touches ? event.touches[0].clientY : event.clientY;
-    const distance = (this.start - y) * 3;
-
-    this.scroll.target = this.scroll.position + distance;
-  }
-
-  onTouchUp() {
-    if (!Detection.isMobile || !this.isVisible || this.preventScroll) return;
-
-    this.isDown = false;
-  }
-
-  onWheel(normalized) {
-    if (!this.isVisible || this.preventScroll) return;
-
-    const speed = normalized.pixelY;
-
-    this.scroll.target += speed;
-
-    return speed;
+  onWheel(event) {
+    this.scroll = event.scroll;
   }
 
   /**
@@ -298,33 +197,17 @@ export default class Page extends EventEmitter {
   /**
    * Loop.
    */
-  update() {
-    if (!this.isScrollable || !this.isVisible || this.preventScroll) return;
+  update(time) {
+    if (!this.isVisible) return;
 
-    this.scroll.target = clamp(0, this.scroll.limit, this.scroll.target);
-
-    this.scroll.current = lerp(
-      this.scroll.current,
-      this.scroll.target,
-      this.scroll.ease
-    );
-
-    this.scroll.current = Number(this.scroll.current.toFixed(2));
-
-    if (this.scroll.current < 0.1) {
-      this.scroll.current = 0;
-    }
-
-    if (this.elements.wrapper) {
-      this.transform(this.elements.wrapper, this.scroll.current);
+    if (this.lenis) {
+      this.lenis.raf(time);
     }
 
     each(this.animations, (animation) => {
       if (animation.update) {
-        animation.update(this.scroll);
+        animation.update(this.lenis.scroll);
       }
     });
-
-    this.scroll.last = this.scroll.current;
   }
 }

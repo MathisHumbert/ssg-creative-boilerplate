@@ -3,13 +3,12 @@ import './utils/scroll';
 
 import FontFaceObserver from 'fontfaceobserver';
 import AutoBind from 'auto-bind';
-import NormalizeWheel from 'normalize-wheel';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Stats from 'stats.js';
+import Lenis from 'lenis';
 
-import ThreeCanvas from './canvas/Three';
-import OglCanvas from './canvas/Ogl';
+import Canvas from './canvas';
 
 import Preloader from './components/Preloader';
 import Grid from './components/Grid';
@@ -21,7 +20,6 @@ import Home from './pages/Home';
 import About from './pages/About';
 
 import { each } from './utils/dom';
-
 gsap.registerPlugin(ScrollTrigger);
 
 class App {
@@ -32,7 +30,6 @@ class App {
     this.template = window.location.pathname;
     this.isLoading = false;
     this.odlElapsedTime = 0;
-    this.webglLibrary = 'ogl'; // ogl || three;
 
     if (import.meta.env.VITE_DEV_MODE === 'true') {
       this.createStats();
@@ -48,6 +45,7 @@ class App {
     this.createPreloader();
 
     this.createPages();
+    this.createLenis();
 
     this.addEventListeners();
     this.addLinkListeners();
@@ -56,31 +54,21 @@ class App {
   createCanvas() {
     this.canvas = null;
 
-    if (this.webglLibrary === 'three') {
-      this.canvas = new ThreeCanvas({
-        template: this.template,
-        size: this.responsive.size,
-      });
-    } else {
-      this.canvas = new OglCanvas({
-        template: this.template,
-        size: this.responsive.size,
-      });
-    }
+    this.canvas = new Canvas({
+      template: this.template,
+      size: this.responsive.size,
+    });
   }
 
   createPreloader() {
-    this.preloader = new Preloader({
-      gl: this.canvas.gl,
-      library: this.webglLibrary,
-    });
+    this.preloader = new Preloader();
 
     this.preloader.once('loaded', this.onPreloaded);
   }
 
   createPages() {
-    this.home = new Home();
-    this.about = new About();
+    this.home = new Home({ responsive: this.responsive });
+    this.about = new About({ responsive: this.responsive });
 
     this.pages = {
       '/': this.home,
@@ -94,28 +82,6 @@ class App {
     this.page = this.pages[this.template];
 
     this.page.createPageLoader();
-  }
-
-  createScrollTrigger() {
-    ScrollTrigger.scrollerProxy('#wrapper', {
-      scrollTop: (value) => {
-        if (arguments.length) {
-          this.page.scroll.current = value;
-        }
-        return this.page.scroll.current;
-      },
-
-      getBoundingClientRect() {
-        return {
-          top: 0,
-          left: 0,
-          width: window.innerWidth,
-          height: window.innerHeight,
-        };
-      },
-    });
-
-    ScrollTrigger.defaults({ scroller: '#wrapper' });
   }
 
   createStats() {
@@ -137,6 +103,19 @@ class App {
     this.responsive = new Responsive();
   }
 
+  createLenis() {
+    this.lenis = new Lenis({
+      smoothWheel: true,
+      syncTouch: true,
+      lerp: 0.125,
+    });
+    this.lenis.stop();
+    this.lenis.on('scroll', ScrollTrigger.update);
+    this.lenis.on('scroll', this.onWheel);
+
+    this.page.lenis = this.lenis;
+  }
+
   /**
    * Events.
    */
@@ -144,8 +123,6 @@ class App {
     this.onResize();
 
     this.update();
-
-    this.createScrollTrigger();
 
     this.canvas.onPreloaded();
 
@@ -167,13 +144,14 @@ class App {
 
     this.isLoading = true;
 
+    this.lenis.stop();
+    this.page.lenis = null;
+
     const page = this.pages[url];
 
     page.createPageLoader();
 
-    this.canvas.onChangeStart();
-
-    await this.page.hide();
+    await Promise.all([this.page.hide(), this.canvas.hide()]);
 
     ScrollTrigger.getAll().forEach((t) => t.kill());
 
@@ -184,9 +162,9 @@ class App {
     this.template = window.location.pathname;
     this.page = page;
 
-    this.createScrollTrigger();
+    this.page.lenis = this.lenis;
 
-    this.canvas.onChangeEnd(this.template);
+    this.canvas.show(this.template);
 
     this.page.createPageLoader();
     this.page.show();
@@ -243,21 +221,19 @@ class App {
   }
 
   onWheel(event) {
-    const normalizedWheel = NormalizeWheel(event);
-
     if (this.canvas && this.canvas.onWheel) {
-      this.canvas.onWheel(normalizedWheel);
+      this.canvas.onWheel(event);
     }
 
     if (this.page && this.page.onWheel) {
-      this.page.onWheel(normalizedWheel);
+      this.page.onWheel(event);
     }
   }
 
   /**
    * Loop.
    */
-  update() {
+  update(time) {
     const elapsedTime = this.clock.getElapsedTime();
     const deltaTime = elapsedTime - this.odlElapsedTime;
     this.odlElapsedTime = elapsedTime;
@@ -267,11 +243,11 @@ class App {
     }
 
     if (this.page) {
-      this.page.update();
+      this.page.update(time);
     }
 
     if (this.canvas && this.canvas.update) {
-      this.canvas.update(this.page.scroll.current, deltaTime);
+      this.canvas.update(this.lenis.scroll, deltaTime);
     }
 
     if (this.stats) {
@@ -305,8 +281,6 @@ class App {
       passive: true,
     });
     window.addEventListener('touchend', this.onTouchUp, { passive: true });
-
-    window.addEventListener('wheel', this.onWheel, { passive: true });
   }
 
   addLinkListeners() {

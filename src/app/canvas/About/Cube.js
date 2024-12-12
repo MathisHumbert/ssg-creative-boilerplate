@@ -1,10 +1,9 @@
+import * as THREE from 'three';
 import gsap from 'gsap';
-import { Box, Mesh, Program } from 'ogl';
 
 export default class Cube {
-  constructor({ element, gl, scene, screen, viewport }) {
+  constructor({ element, scene, screen, viewport }) {
     this.element = element;
-    this.gl = gl;
     this.scene = scene;
     this.screen = screen;
     this.viewport = viewport;
@@ -21,46 +20,14 @@ export default class Cube {
    * Create.
    */
   createMesh() {
-    this.geometry = new Box(this.gl);
-    this.material = new Program(this.gl, {
-      uniforms: {
-        uAlpha: { value: 0 },
-      },
-      vertex: /* glsl */ `
-        attribute vec3 position;
-        attribute vec3 normal;
-
-        uniform mat4 modelViewMatrix;
-        uniform mat4 projectionMatrix;
-        uniform mat3 normalMatrix;
-
-        varying vec3 vNormal;
-
-        void main() {
-            vNormal = normalize(normalMatrix * normal);
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragment: /* glsl */ `
-        precision highp float;
-
-        uniform float uAlpha;
-
-        varying vec3 vNormal;
-
-        void main() {
-          vec3 normal = normalize(vNormal);
-          gl_FragColor = vec4(normal, uAlpha);
-        }
-      `,
-      cullFace: false,
+    this.geometry = new THREE.BoxGeometry(1, 1, 1);
+    this.material = new THREE.MeshNormalMaterial({
+      opacity: 0,
+      transparent: true,
     });
 
-    this.mesh = new Mesh(this.gl, {
-      geometry: this.geometry,
-      program: this.material,
-    });
-    this.mesh.setParent(this.scene);
+    this.mesh = new THREE.Mesh(this.geometry, this.material);
+    this.scene.add(this.mesh);
   }
 
   createBounds() {
@@ -100,13 +67,19 @@ export default class Cube {
   show() {
     this.isVisible = true;
 
-    gsap.fromTo(this.material.uniforms.uAlpha, { value: 0 }, { value: 1 });
+    gsap.fromTo(this.material, { opacity: 0 }, { opacity: 1 });
   }
 
   hide() {
-    this.isVisible = false;
+    return new Promise((res) => {
+      this.isVisible = false;
 
-    gsap.to(this.material.uniforms.uAlpha, { value: 0 });
+      gsap.set(this.material, {
+        opacity: 0,
+      });
+
+      res();
+    });
   }
 
   /**
@@ -131,5 +104,32 @@ export default class Cube {
     this.mesh.rotation.y += time * 0.5;
 
     this.scroll = scroll;
+  }
+
+  /**
+   * Destroy.
+   */
+  destroyGeometry() {
+    if (this.geometry) {
+      this.geometry.dispose();
+    }
+  }
+
+  destroyMaterial() {
+    if (this.material) {
+      this.material.dispose();
+    }
+  }
+
+  destroyMesh() {
+    if (this.mesh) {
+      this.scene.remove(this.mesh);
+    }
+  }
+
+  destroy() {
+    this.destroyGeometry();
+    this.destroyMaterial();
+    this.destroyMesh();
   }
 }

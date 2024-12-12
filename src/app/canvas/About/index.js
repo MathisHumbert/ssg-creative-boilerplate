@@ -1,15 +1,14 @@
-import { Transform } from 'ogl';
+import * as THREE from 'three';
 
 import Cube from './Cube';
 
 export default class About {
-  constructor({ gl, scene, screen, viewport }) {
-    this.gl = gl;
+  constructor({ scene, screen, viewport }) {
     this.scene = scene;
     this.screen = screen;
     this.viewport = viewport;
 
-    this.group = new Transform();
+    this.group = new THREE.Group();
 
     this.createCube();
   }
@@ -17,7 +16,6 @@ export default class About {
   createCube() {
     this.cube = new Cube({
       element: document.querySelector('.about__media'),
-      gl: this.gl,
       scene: this.group,
       screen: this.screen,
       viewport: this.viewport,
@@ -28,7 +26,7 @@ export default class About {
    * Animations.
    */
   show() {
-    this.group.setParent(this.scene);
+    this.scene.add(this.group);
 
     if (this.cube && this.cube.show) {
       this.cube.show();
@@ -36,11 +34,17 @@ export default class About {
   }
 
   hide() {
-    this.scene.removeChild(this.group);
+    let promise;
 
     if (this.cube && this.cube.hide) {
-      this.cube.hide();
+      promise = this.cube.hide();
     }
+
+    promise.then(() => {
+      this.scene.remove(this.group);
+    });
+
+    return promise;
   }
 
   /**
