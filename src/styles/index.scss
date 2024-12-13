@@ -1,16 +1,5 @@
-@import './base/reset';
+@use './base/index' as base;
 
-@import './utils/variables';
-@import './utils/functions';
-@import './utils/mixins';
+@use './layouts/index' as layouts;
 
-@import './shared/pages';
-
-@import './base/fonts';
-@import './base/base';
-
-@import './layouts/nav';
-@import './layouts/grid';
-
-@import './pages/home/home';
-@import './pages/about/about';
+@use './pages/index' as pages;

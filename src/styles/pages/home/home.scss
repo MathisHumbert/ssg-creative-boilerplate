@@ -1,3 +1,6 @@
+@use '../../shared/index' as *;
+@use '../../utils/index' as *;
+
 .home {
   @extend %page;
 
@@ -5,36 +8,52 @@
     @extend %page--active;
   }
 }
-
 .home__top {
   height: 75vh;
-  width: 100vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 18px;
+  gap: 1.8rem;
+
+  @include mobile {
+    height: 100vh;
+  }
 
   h1 {
-    font-size: 12rem;
+    font-size: 10rem;
+
+    @include mobile {
+      font-size: 4rem;
+    }
   }
 
   a {
-    color: plum;
+    color: $color-pink;
     font-size: 3rem;
+
+    @include mobile {
+      font-size: 1.5rem;
+    }
   }
 }
 
 .home__bottom {
   height: 75vh;
-  width: 100vw;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   padding-bottom: 20rem;
 
   .home__media {
-    width: 90rem;
-    height: 90rem;
+    width: 70rem;
+    height: 70rem;
+
+    @include mobile {
+      width: 20rem;
+      height: 20rem;
+    }
   }
 }

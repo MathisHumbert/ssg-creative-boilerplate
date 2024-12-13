@@ -1,3 +1,6 @@
+@use 'sass:map';
+@use '../utils/_index' as *;
+
 *,
 *:after,
 *:before {
@@ -8,7 +11,7 @@
 html {
   @extend %cover;
 
-  font-size: calc(100vw / 1920 * 10);
+  font-size: calc(100vw / $sizes-desktop * 10);
   font-family: $font-satoshi;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -26,8 +29,8 @@ html {
     display: none;
   }
 
-  @include media('<phone') {
-    font-size: calc(100vw / 1000 * 10);
+  @include mobile {
+    font-size: calc(100vw / $sizes-mobile * 10);
   }
 }
 

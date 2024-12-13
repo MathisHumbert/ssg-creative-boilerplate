@@ -93,10 +93,7 @@ class App {
   }
 
   createGrid() {
-    new Grid({
-      desktop: { count: 12, margin: 32, gutter: 20 },
-      mobile: { count: 4, margin: 24, gutter: 20 },
-    });
+    this.grid = new Grid();
   }
 
   createResponsive() {
@@ -181,6 +178,10 @@ class App {
 
     if (this.page && this.page.onResize) {
       this.page.onResize(this.responsive.size, this.responsive.fontSize);
+    }
+
+    if (this.grid && this.grid.onResize) {
+      this.grid.onResize();
     }
 
     window.requestAnimationFrame(() => {

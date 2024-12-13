@@ -1,3 +1,6 @@
+@use 'sass:map';
+@use '../utils/variables' as *;
+
 %cover {
   height: 100%;
   left: 0;
@@ -22,5 +25,17 @@
     display: inline-block;
     padding-top: $width / $height * 100%;
     width: 100%;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: #{map.get($breakpoints, 'mobile')}px) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{map.get($breakpoints, 'desktop')}px) {
+    @content;
   }
 }

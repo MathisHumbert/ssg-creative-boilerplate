@@ -1,3 +1,6 @@
+@use '../shared/index' as *;
+@use '../utils/index' as *;
+
 .grid__wrapper {
   @extend %cover;
 
@@ -5,8 +8,8 @@
   pointer-events: none;
   display: flex;
   justify-content: space-between;
-  gap: var(--gutter);
-  padding: 0 var(--margin);
+  gap: $grid-gutter;
+  padding: 0 $grid-margin;
 }
 
 .grid {

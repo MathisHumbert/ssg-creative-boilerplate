@@ -1,3 +1,5 @@
+@use '../utils/_index' as *;
+
 @font-face {
   font-family: $font-satoshi;
   src: url('../fonts/satoshi-medium.woff2') format('woff2'),

@@ -1,20 +1,21 @@
 import Component from '../classes/Component';
-import { Detection } from '../classes/Detection';
 import { each } from '../utils/dom';
 
 export default class Grid extends Component {
-  constructor({ desktop, mobile }) {
+  constructor() {
     super({ element: null, elements: {} });
 
-    if (Detection.isMobile) {
-      this.count = mobile.count;
-      this.margin = mobile.margin;
-      this.gutter = mobile.gutter;
-    } else {
-      this.count = desktop.count;
-      this.margin = desktop.margin;
-      this.gutter = desktop.gutter;
-    }
+    this.count = parseInt(
+      getComputedStyle(document.documentElement).getPropertyValue(
+        '--grid-count'
+      )
+    );
+
+    this.breakpointsMobile = parseInt(
+      getComputedStyle(document.documentElement).getPropertyValue(
+        '--breakpoints-mobile'
+      )
+    );
 
     this.createGrid();
   }
@@ -22,9 +23,6 @@ export default class Grid extends Component {
   createGrid() {
     this.element = document.createElement('div');
     this.element.className = 'grid__wrapper';
-
-    this.element.style.setProperty('--margin', `${this.margin / 10}rem`);
-    this.element.style.setProperty('--gutter', `${this.gutter / 10}rem`);
 
     each(Array.from(Array(this.count).keys()), (_) => {
       const element = document.createElement('div');
@@ -41,9 +39,31 @@ export default class Grid extends Component {
   }
 
   hideGrid() {
+    u;
     this.isVisible = false;
 
     document.body.removeChild(this.element);
+  }
+
+  onResize() {
+    const count = parseInt(
+      getComputedStyle(document.documentElement).getPropertyValue(
+        '--grid-count'
+      )
+    );
+
+    if (this.count !== count) {
+      this.count = count;
+
+      this.element.textContent = '';
+
+      each(Array.from(Array(this.count).keys()), (_) => {
+        const element = document.createElement('div');
+        element.className = 'grid';
+
+        this.element.appendChild(element);
+      });
+    }
   }
 
   addEventListeners() {

@@ -1,16 +1,31 @@
+@use '../shared/index' as *;
+@use '../utils/index' as *;
+
 .nav {
   position: fixed;
   top: 5rem;
   left: 5rem;
-
   z-index: z('navigation');
+
+  @include mobile {
+    top: 2rem;
+    left: 2rem;
+  }
 }
 
 .nav__list {
   display: flex;
   gap: 5rem;
+
+  @include mobile {
+    gap: 2rem;
+  }
 }
 
 .nav__item {
   font-size: 4rem;
+
+  @include mobile {
+    font-size: 1.5rem;
+  }
 }

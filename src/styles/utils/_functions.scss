@@ -1,0 +1,18 @@
+@use 'sass:list';
+@use '../utils/variables' as *;
+
+@function z($name) {
+  @if list.index($z-indexes, $name) {
+    @return (list.length($z-indexes) - list.index($z-indexes, $name)) + 1;
+  } @else {
+    @warn 'There is no item "#{$name}" in this list; Choose one of: #{$z-indexes}';
+
+    @return null;
+  }
+}
+
+@function columns($columns) {
+  @return calc(
+    (#{$columns} * $grid-column-width) + ((#{$columns} - 1) * $grid-gutter)
+  );
+}

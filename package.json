@@ -17,7 +17,7 @@
     "dotenv": "^16.4.5",
     "html-minifier": "^4.0.0",
     "pug": "^3.0.3",
-    "sass": "^1.78.0",
+    "sass": "^1.83.0",
     "vite": "^5.4.3",
     "vite-plugin-glslify": "^2.1.0"
   },
