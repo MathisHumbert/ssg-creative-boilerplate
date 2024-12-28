@@ -6,7 +6,8 @@
   "scripts": {
     "clean": "rm -rf _site",
     "dev": "pnpm run clean && eleventy --config=.eleventy.cjs --serve --incremental",
-    "build": "pnpm run clean && eleventy --config=.eleventy.cjs"
+    "build": "pnpm run clean && eleventy --config=.eleventy.cjs",
+    "preview": "serve _site -l 3000"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
@@ -18,6 +19,7 @@
     "html-minifier": "^4.0.0",
     "pug": "^3.0.3",
     "sass": "^1.83.0",
+    "serve": "^14.2.4",
     "vite": "^5.4.3",
     "vite-plugin-glslify": "^2.1.0"
   },

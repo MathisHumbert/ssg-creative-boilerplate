@@ -31,7 +31,7 @@ class App {
     this.isLoading = false;
     this.odlElapsedTime = 0;
 
-    if (import.meta.env.VITE_DEV_MODE === 'true') {
+    if (import.meta.env.MODE === 'development') {
       this.createStats();
       this.createGrid();
     }
@@ -80,8 +80,6 @@ class App {
     }
 
     this.page = this.pages[this.template];
-
-    this.page.createPageLoader();
   }
 
   createStats() {
@@ -145,8 +143,6 @@ class App {
     this.page.lenis = null;
 
     const page = this.pages[url];
-
-    page.createPageLoader();
 
     await Promise.all([this.page.hide(), this.canvas.hide()]);
 

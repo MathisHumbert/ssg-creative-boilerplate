@@ -108,8 +108,8 @@ export default class Page extends EventEmitter {
    * Loaders.
    */
   createLazyLoader() {
-    this.preloaders = map(
-      this.elements.preloaders,
+    each(
+      this.elements.lazyLoaders,
       (element) =>
         new LazyLoad({
           element,
@@ -122,13 +122,12 @@ export default class Page extends EventEmitter {
 
     this.imagesLoaded = true;
 
-    map(this.elements.pagePreloaders, (element) => new PageLoad({ element }));
+    each(this.elements.pageLoaders, (element) => new PageLoad({ element }));
   }
 
   /**
    * Animations.
    */
-
   show() {
     this.lenis.scrollTo(0, { immediate: true, force: true });
     this.scroll = 0;
