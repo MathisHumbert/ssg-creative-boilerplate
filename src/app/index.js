@@ -20,6 +20,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 
 import { each } from './utils/dom';
+
 gsap.registerPlugin(ScrollTrigger);
 
 class App {
@@ -28,7 +29,8 @@ class App {
 
     this.clock = new Clock();
     this.template = window.location.pathname;
-    this.isLoading = false;
+    this.lastUrl = window.location.pathname;
+    this.isNavigating = false;
     this.odlElapsedTime = 0;
 
     if (import.meta.env.MODE === 'development') {
@@ -125,7 +127,14 @@ class App {
     this.page.show();
   }
 
-  onPopState() {
+  onPopState(e) {
+    if (this.isNavigating) {
+      e.preventDefault();
+      window.history.pushState({}, '', this.lastUrl);
+      return;
+    }
+    this.lastUrl = window.location.pathname;
+
     this.onChange({
       url: window.location.pathname,
       push: false,
@@ -135,9 +144,9 @@ class App {
   async onChange({ url, push = true }) {
     url = url.replace(window.location.origin, '');
 
-    if (this.template === url || this.isLoading) return;
+    if (this.template === url || this.isNavigating) return;
 
-    this.isLoading = true;
+    this.isNavigating = true;
 
     this.lenis.stop();
     this.page.lenis = null;
@@ -164,7 +173,7 @@ class App {
 
     this.onResize();
 
-    this.isLoading = false;
+    this.isNavigating = false;
   }
 
   onResize() {
