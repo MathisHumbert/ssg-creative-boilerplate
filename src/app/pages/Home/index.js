@@ -1,3 +1,5 @@
+import gsap from 'gsap';
+
 import Page from '../../classes/Page';
 
 export default class Home extends Page {
@@ -14,15 +16,81 @@ export default class Home extends Page {
   /**
    * Animations.
    */
-  async show() {
+  show(prevTemplate) {
+    let tl = null;
+
     this.element.classList.add(this.classes.active);
 
-    return super.show();
+    // if (prevTemplate === null) {
+    //   tl = this.showHome();
+    // } else if (prevTemplate === 'about') {
+    //   tl = this.showHomeFromAbout();
+    // }
+
+    return super.show(tl);
   }
 
-  async hide() {
+  showHome() {
+    const tl = gsap.timeline();
+
+    return tl;
+  }
+
+  showHomeFromAbout() {
+    const tl = gsap.timeline();
+
+    return tl;
+  }
+
+  hide(nextTemplate) {
+    let tl = null;
+
     this.element.classList.remove(this.classes.active);
 
-    return super.hide();
+    // if (nextTemplate === null) {
+    //   tl = this.hideHome();
+    // } else if (nextTemplate === 'about') {
+    //   tl = this.hideHomeToAbout();
+    // }
+
+    return super.hide(tl);
+  }
+
+  hideHome() {
+    const tl = gsap.timeline({
+      onComplete: () => this.element.classList.remove(this.classes.active),
+    });
+
+    return tl;
+  }
+
+  hideHomeToAbout() {
+    const tl = gsap.timeline({
+      onComplete: () => this.element.classList.remove(this.classes.active),
+    });
+
+    return tl;
+  }
+
+  /**
+   * Events
+   */
+  onResize(size, fontSize) {
+    super.onResize(size, fontSize);
+
+    this.fontSize = fontSize;
+    this.size = size;
+  }
+
+  /**
+   * Listeners.
+   */
+  addEventListeners() {}
+
+  /**
+   * Loop.
+   */
+  update(scroll, time) {
+    super.update(scroll, time);
   }
 }

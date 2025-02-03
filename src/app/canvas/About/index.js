@@ -25,19 +25,23 @@ export default class About {
   /**
    * Animations.
    */
-  show() {
+  show(prevTemplate) {
+    let promise;
+
     this.scene.add(this.group);
 
     if (this.cube && this.cube.show) {
-      this.cube.show();
+      promise = this.cube.show(prevTemplate);
     }
+
+    return promise;
   }
 
-  hide() {
+  hide(nextTemplate) {
     let promise;
 
     if (this.cube && this.cube.hide) {
-      promise = this.cube.hide();
+      promise = this.cube.hide(nextTemplate);
     }
 
     promise.then(() => {

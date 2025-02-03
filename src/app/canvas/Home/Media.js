@@ -100,9 +100,13 @@ export default class Media {
    * Animations.
    */
   show() {
-    this.isVisible = true;
+    return new Promise((res) => {
+      this.isVisible = true;
 
-    gsap.fromTo(this.material.uniforms.uAlpha, { value: 0 }, { value: 1 });
+      gsap.fromTo(this.material.uniforms.uAlpha, { value: 0 }, { value: 1 });
+
+      res();
+    });
   }
 
   hide() {

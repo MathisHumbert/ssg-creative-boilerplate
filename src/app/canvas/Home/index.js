@@ -27,19 +27,23 @@ export default class Home {
   /**
    * Animations.
    */
-  show() {
+  show(prevTemplate) {
+    let promise;
+
     this.scene.add(this.group);
 
     if (this.media && this.media.show) {
-      this.media.show();
+      promise = this.media.show(prevTemplate);
     }
+
+    return promise;
   }
 
-  hide() {
+  hide(nextTemplate) {
     let promise;
 
     if (this.media && this.media.hide) {
-      promise = this.media.hide();
+      promise = this.media.hide(nextTemplate);
     }
 
     promise.then(() => {

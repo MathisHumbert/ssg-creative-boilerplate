@@ -128,37 +128,41 @@ export default class Page extends EventEmitter {
   /**
    * Animations.
    */
-  show() {
-    this.lenis.scrollTo(0, { immediate: true, force: true });
+  show(showPage = null) {
     this.scroll = 0;
 
     each(this.animations, (animation) => animation.createAnimation());
 
     return new Promise((res) => {
-      const tl = gsap.timeline();
+      const tl = showPage || gsap.timeline();
 
-      tl.set(document.documentElement, {
-        backgroundColor: this.element.getAttribute('data-background'),
-        color: this.element.getAttribute('data-color'),
-      })
-        .set(this.element, { autoAlpha: 1 }, 0)
-        .call(() => {
-          this.lenis.start();
-          this.isVisible = true;
-          res();
-        });
+      if (!showPage) {
+        tl.set(document.documentElement, {
+          backgroundColor: this.element.getAttribute('data-background'),
+          color: this.element.getAttribute('data-color'),
+        }).set(this.element, { autoAlpha: 1 }, 0);
+      }
+
+      tl.call(() => {
+        this.isVisible = true;
+        res();
+      });
     });
   }
 
-  hide() {
+  hide(hidePage = null) {
     this.isVisible = false;
 
     each(this.animations, (animation) => animation.destroyAnimation());
 
     return new Promise((res) => {
-      const tl = gsap.timeline();
+      const tl = hidePage || gsap.timeline();
 
-      tl.set(this.element, { autoAlpha: 0 }).call(() => res());
+      if (!hidePage) {
+        tl.set(this.element, { autoAlpha: 0 });
+      }
+
+      tl.call(() => res());
     });
   }
 
@@ -196,16 +200,12 @@ export default class Page extends EventEmitter {
   /**
    * Loop.
    */
-  update(time) {
+  update(scroll, time) {
     if (!this.isVisible) return;
-
-    if (this.lenis) {
-      this.lenis.raf(time);
-    }
 
     each(this.animations, (animation) => {
       if (animation.update) {
-        animation.update(this.lenis.scroll);
+        animation.update(scroll);
       }
     });
   }

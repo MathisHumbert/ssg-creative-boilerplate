@@ -65,9 +65,13 @@ export default class Cube {
    * Animations.
    */
   show() {
-    this.isVisible = true;
+    return new Promise((res) => {
+      this.isVisible = true;
 
-    gsap.fromTo(this.material, { opacity: 0 }, { opacity: 1 });
+      gsap.fromTo(this.material, { opacity: 0 }, { opacity: 1 });
+
+      res();
+    });
   }
 
   hide() {

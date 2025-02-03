@@ -1,7 +1,6 @@
 import '../styles/index.scss';
 import './utils/scroll';
 
-import FontFaceObserver from 'fontfaceobserver';
 import AutoBind from 'auto-bind';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -28,10 +27,11 @@ class App {
     AutoBind(this);
 
     this.clock = new Clock();
-    this.template = window.location.pathname;
+    this.url = window.location.pathname;
     this.lastUrl = window.location.pathname;
-    this.isNavigating = false;
+    this.isNavigating = true;
     this.odlElapsedTime = 0;
+    this.lenis = null;
 
     if (import.meta.env.MODE === 'development') {
       this.createStats();
@@ -43,21 +43,43 @@ class App {
 
   init() {
     this.createResponsive();
-    this.createCanvas();
-    this.createPreloader();
 
     this.createPages();
+    this.createCanvas();
+
+    this.createPreloader();
     this.createLenis();
 
     this.addEventListeners();
     this.addLinkListeners();
+
+    this.update();
+  }
+
+  /**
+   * Create.
+   */
+  createPages() {
+    this.pages = {
+      home: new Home({ responsive: this.responsive }),
+      about: new About({ responsive: this.responsive }),
+    };
+
+    this.templates = {
+      '/': 'home',
+      '/about': 'about',
+    };
+
+    if (this.url !== '/' && this.url.endsWith('/')) {
+      this.url = this.url.slice(0, -1);
+    }
+
+    this.template = this.templates[this.url];
+    this.page = this.pages[this.template];
   }
 
   createCanvas() {
-    this.canvas = null;
-
     this.canvas = new Canvas({
-      template: this.template,
       size: this.responsive.size,
     });
   }
@@ -65,23 +87,9 @@ class App {
   createPreloader() {
     this.preloader = new Preloader();
 
+    this.preloader.preloadPage(this.page.element);
+
     this.preloader.once('loaded', this.onPreloaded);
-  }
-
-  createPages() {
-    this.home = new Home({ responsive: this.responsive });
-    this.about = new About({ responsive: this.responsive });
-
-    this.pages = {
-      '/': this.home,
-      '/about': this.about,
-    };
-
-    if (this.template !== '/' && this.template.endsWith('/')) {
-      this.template = this.template.slice(0, -1);
-    }
-
-    this.page = this.pages[this.template];
   }
 
   createStats() {
@@ -116,15 +124,17 @@ class App {
   /**
    * Events.
    */
-  onPreloaded() {
+  async onPreloaded() {
     this.onResize();
 
-    this.update();
-
     this.canvas.onPreloaded();
-
     this.page.createPageLoader();
-    this.page.show();
+
+    await Promise.all([this.page.show(null), this.canvas.show(this.template)]);
+
+    this.lenis.start();
+
+    this.isNavigating = false;
   }
 
   onPopState(e) {
@@ -133,10 +143,11 @@ class App {
       window.history.pushState({}, '', this.lastUrl);
       return;
     }
+
     this.lastUrl = window.location.pathname;
 
     this.onChange({
-      url: window.location.pathname,
+      url: window.location.href,
       push: false,
     });
   }
@@ -144,16 +155,21 @@ class App {
   async onChange({ url, push = true }) {
     url = url.replace(window.location.origin, '');
 
-    if (this.template === url || this.isNavigating) return;
+    if (url === this.url || this.isNavigating) return;
 
+    this.url = url;
     this.isNavigating = true;
 
     this.lenis.stop();
     this.page.lenis = null;
 
-    const page = this.pages[url];
+    const nextTemplate = this.templates[url];
+    const page = this.pages[nextTemplate];
 
-    await Promise.all([this.page.hide(), this.canvas.hide()]);
+    await Promise.all([
+      this.page.hide(nextTemplate),
+      this.canvas.hide(nextTemplate),
+    ]);
 
     ScrollTrigger.getAll().forEach((t) => t.kill());
 
@@ -161,17 +177,26 @@ class App {
       window.history.pushState({}, '', url);
     }
 
-    this.template = window.location.pathname;
+    const prevTemplate = this.template;
+
+    this.template = nextTemplate;
     this.page = page;
 
+    this.lenis.scrollTo(0, { immediate: true, force: true });
     this.page.lenis = this.lenis;
 
-    this.canvas.show(this.template);
+    await this.preloader.loadPage(this.page.element);
 
     this.page.createPageLoader();
-    this.page.show();
 
     this.onResize();
+
+    await Promise.all([
+      this.page.show(prevTemplate),
+      this.canvas.show(this.template),
+    ]);
+
+    this.lenis.start();
 
     this.isNavigating = false;
   }
@@ -248,8 +273,12 @@ class App {
       this.stats.begin();
     }
 
+    if (!this.isNavigating) {
+      this.lenis.raf(time);
+    }
+
     if (this.page) {
-      this.page.update(time);
+      this.page.update(this.lenis.scroll, deltaTime);
     }
 
     if (this.canvas && this.canvas.update) {
@@ -317,8 +346,4 @@ class App {
   }
 }
 
-const satoshiFont = new FontFaceObserver('Satoshi');
-
-Promise.all([satoshiFont.load()])
-  .then(() => new App())
-  .catch(() => new App());
+new App();

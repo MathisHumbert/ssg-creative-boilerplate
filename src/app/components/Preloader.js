@@ -1,7 +1,9 @@
 import * as THREE from 'three';
 import imagesLoaded from 'imagesloaded';
+import FontFaceObserver from 'fontfaceobserver';
 
 import Component from '../classes/Component';
+import { map } from '../utils/dom';
 
 export default class Preloader extends Component {
   constructor() {
@@ -9,41 +11,105 @@ export default class Preloader extends Component {
       element: '.preloader',
     });
 
+    this.loadedTextureUrl = [];
     window.TEXTURES = {};
 
-    this.createLoader();
+    this.textureLoader = new THREE.TextureLoader();
   }
 
-  createLoader() {
-    const preloadImages = new Promise((resolve) => {
-      imagesLoaded(
-        document.querySelectorAll('img'),
-        { background: true },
-        resolve
-      );
+  /**
+   * Events.
+   */
+  preloadPage(content) {
+    this.loadedTextureUrl.push(window.location.pathname);
+
+    const images = content.querySelectorAll('data-src');
+
+    const preloadImages = new Promise((res) => {
+      imagesLoaded(content, { background: true }, res);
     });
 
-    const textureLoader = new THREE.TextureLoader();
+    const preloadTextures = this.loadTextures([...images, 'texture.jpeg']);
 
-    const preloadTextures = Promise.all(
-      [...window.ASSETS, 'texture.jpeg'].map(
+    const preloadFonts = this.loadFonts();
+
+    const preloaderAnimation = this.animatePreloader();
+
+    Promise.all([
+      preloadImages,
+      preloadTextures,
+      preloadFonts,
+      preloaderAnimation,
+    ]).then(() => {
+      if (this.element) {
+        this.element.parentNode.removeChild(this.element);
+      }
+
+      this.emit('loaded');
+    });
+  }
+
+  loadPage(content) {
+    const images = content.querySelectorAll('data-src');
+
+    if (!this.loadedTextureUrl.includes(window.location.pathname)) {
+      this.loadedTextureUrl.push(window.location.pathname);
+
+      const loadImages = new Promise((res) => {
+        imagesLoaded(content, { background: true }, res);
+      });
+
+      const loadTextures = this.loadTextures(images);
+
+      return new Promise((res) => {
+        Promise.all([loadImages, loadTextures]).then(() => {
+          res();
+        });
+      });
+    } else {
+      const loadImages = new Promise((res) => {
+        imagesLoaded(content, { background: true }, res);
+      });
+
+      return new Promise((res) => {
+        loadImages.then(() => {
+          res();
+        });
+      });
+    }
+  }
+
+  loadFonts() {
+    const satoshiFont = new FontFaceObserver('Satoshi');
+
+    return Promise.all([satoshiFont.load()]);
+  }
+
+  loadTextures(images) {
+    return Promise.all(
+      map(
+        images,
         (image) =>
-          new Promise((resolve) => {
-            textureLoader.load(image, (texture) => {
+          new Promise((res) => {
+            this.textureLoader.load(image, (texture) => {
               texture.generateMipmaps = false;
               texture.minFilter = THREE.LinearFilter;
               texture.needsUpdate = true;
 
               window.TEXTURES[image] = texture;
-
-              resolve();
+              res();
             });
           })
       )
     );
+  }
 
-    Promise.all([preloadImages, preloadTextures]).then(() => {
-      this.emit('loaded');
+  /**
+   * Animations.
+   */
+  animatePreloader() {
+    return new Promise(async (res) => {
+      res();
     });
   }
 }

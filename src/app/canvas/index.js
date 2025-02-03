@@ -4,8 +4,8 @@ import Home from './Home';
 import About from './About';
 
 export default class Canvas {
-  constructor({ template, size }) {
-    this.template = template;
+  constructor({ size }) {
+    this.template = null;
     this.screen = size;
 
     this.createScene();
@@ -66,42 +66,47 @@ export default class Canvas {
     });
   }
 
-  /**
-   * Events.
-   */
   onPreloaded() {
     this.createHome();
     this.createAbout();
-
-    this.show(this.template);
   }
 
-  hide() {
+  /**
+   * Animations.
+   */
+  hide(nextTemplate) {
     let promise;
 
-    if (this.template === '/') {
-      promise = this.home.hide();
+    if (this.template === 'home') {
+      promise = this.home.hide(nextTemplate);
     }
 
-    if (this.template === '/about') {
-      promise = this.about.hide();
+    if (this.template === 'about') {
+      promise = this.about.hide(nextTemplate);
     }
 
     return promise;
   }
 
   show(template) {
-    if (template === '/') {
-      this.home.show();
+    let promise;
+
+    if (template === 'home') {
+      promise = this.home.show(this.template);
     }
 
-    if (template === '/about') {
-      this.about.show();
+    if (template === 'about') {
+      promise = this.about.show(this.template);
     }
 
     this.template = template;
+
+    return promise;
   }
 
+  /**
+   * Events.
+   */
   onResize(size) {
     this.screen = size;
 
