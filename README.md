@@ -1,6 +1,6 @@
 ## Mathis Humbert
 
-A boilerplate template for creative websites using JavaScript (OOP) with no framework, WebGL via THREE or OGL and GSAP, working with 11ty for SSG.
+A boilerplate template for creative websites using JavaScript (OOP) with no framework, WebGL via THREE and GSAP, working with 11ty for SSG.
 
 ### Description
 

@@ -14,6 +14,13 @@ export default class Home extends Page {
   }
 
   /**
+   * Create.
+   */
+  create() {
+    super.create();
+  }
+
+  /**
    * Animations.
    */
   show(prevTemplate) {

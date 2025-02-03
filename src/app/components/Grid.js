@@ -39,7 +39,6 @@ export default class Grid extends Component {
   }
 
   hideGrid() {
-    u;
     this.isVisible = false;
 
     document.body.removeChild(this.element);

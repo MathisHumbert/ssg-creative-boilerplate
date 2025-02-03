@@ -9,8 +9,6 @@
 }
 
 html {
-  @extend %cover;
-
   font-size: calc(100vw / $sizes-desktop * 10);
   font-family: $font-satoshi;
   font-synthesis: none;

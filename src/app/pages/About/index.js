@@ -12,6 +12,13 @@ export default class About extends Page {
   }
 
   /**
+   * Create.
+   */
+  create() {
+    super.create();
+  }
+
+  /**
    * Animations.
    */
   show(prevTemplate) {

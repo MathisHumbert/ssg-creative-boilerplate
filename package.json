@@ -1,7 +1,9 @@
 {
   "name": "ssg-creative-boilerplate",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "author": "Mathis Humbert",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "clean": "rm -rf _site",
@@ -20,7 +22,7 @@
     "pug": "^3.0.3",
     "sass": "^1.83.0",
     "serve": "^14.2.4",
-    "vite": "^5.4.3",
+    "vite": "^6.0.11",
     "vite-plugin-glslify": "^2.1.0"
   },
   "dependencies": {
