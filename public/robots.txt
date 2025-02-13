@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://sg-creative-boilerplate.vercel.app/sitemap.xml

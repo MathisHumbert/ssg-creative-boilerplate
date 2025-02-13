@@ -1,18 +1,21 @@
-const htmlmin = require('html-minifier');
-const EleventyVitePlugin = require('@11ty/eleventy-plugin-vite');
-const glslifyPlugin = require('vite-plugin-glslify').default;
+import htmlmin from 'html-minifier';
+import EleventyVitePlugin from '@11ty/eleventy-plugin-vite';
+import EleventyPugPlugin from '@11ty/eleventy-plugin-pug';
+import glsl from 'vite-plugin-glsl';
 
-module.exports = function (eleventyConfig) {
+export default async function (eleventyConfig) {
   eleventyConfig.setServerOptions({
     port: 3000,
   });
 
+  eleventyConfig.addPlugin(EleventyPugPlugin);
   eleventyConfig.addPlugin(EleventyVitePlugin, {
     tempFolderName: '.11ty-vite',
     viteOptions: {
       publicDir: 'public',
       root: 'src',
-      plugins: [glslifyPlugin()],
+      plugins: [glsl()],
+      appType: 'spa',
     },
   });
 
@@ -44,4 +47,4 @@ module.exports = function (eleventyConfig) {
     passthroughFileCopy: true,
     htmlTemplateEngine: 'pug',
   };
-};
+}

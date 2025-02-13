@@ -77,6 +77,14 @@ canvas {
   z-index: z('canvas');
 }
 
+.content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  z-index: z('content');
+}
+
 [data-animation='appear'] span {
   will-change: opacity, visibility;
 }

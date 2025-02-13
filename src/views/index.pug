@@ -3,11 +3,10 @@ html(lang="en")
   head
     include _includes/layouts/head.pug
 
-  include _includes/layouts/nav.pug
-
-
   body
-    include _includes/pages/home.pug
-    include _includes/pages/about.pug
+    include _includes/layouts/nav.pug
+    .content 
+      include _includes/pages/home.pug
+      include _includes/pages/about.pug
 
   script(type="module", src="/src/app/index.js")
