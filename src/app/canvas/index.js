@@ -1,44 +1,52 @@
-import * as THREE from 'three';
+import { PerspectiveCamera, Scene, WebGLRenderer } from 'three';
+import AutoBind from 'auto-bind';
 
 import Home from './Home';
 import About from './About';
 
+import { responsive } from '../classes/Responsive';
+
+import { events } from '../utils/events';
+
 export default class Canvas {
-  constructor({ size }) {
+  constructor() {
+    AutoBind(this);
+
     this.template = null;
-    this.screen = size;
 
     this.createScene();
     this.createCamera();
     this.createRender();
 
-    this.onResize(size);
+    this.addEventListeners();
   }
 
   /**
    * THREE.
    */
   createScene() {
-    this.scene = new THREE.Scene();
+    this.scene = new Scene();
   }
 
   createCamera() {
-    this.camera = new THREE.PerspectiveCamera(
+    this.camera = new PerspectiveCamera(
       45,
-      this.screen.width / this.screen.height,
+      responsive.screen.width / responsive.screen.height,
       0.1,
       100
     );
     this.camera.position.z = 5;
+
+    responsive.setCamera(this.camera);
   }
 
   createRender() {
-    this.renderer = new THREE.WebGLRenderer({
+    this.renderer = new WebGLRenderer({
       alpha: true,
       antialias: true,
     });
 
-    this.renderer.setSize(this.screen.width, this.screen.height);
+    this.renderer.setSize(responsive.screen.width, responsive.screen.height);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     document.body.appendChild(this.renderer.domElement);
@@ -50,8 +58,6 @@ export default class Canvas {
   createHome() {
     this.home = new Home({
       scene: this.scene,
-      screen: this.screen,
-      viewport: this.viewport,
     });
   }
 
@@ -61,8 +67,6 @@ export default class Canvas {
   createAbout() {
     this.about = new About({
       scene: this.scene,
-      screen: this.screen,
-      viewport: this.viewport,
     });
   }
 
@@ -108,27 +112,11 @@ export default class Canvas {
    * Events.
    */
   onResize(size) {
-    this.screen = size;
-
-    this.renderer.setSize(this.screen.width, this.screen.height);
+    this.renderer.setSize(responsive.screen.width, responsive.screen.height);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    this.camera.aspect = this.screen.width / this.screen.height;
+    this.camera.aspect = responsive.screen.width / responsive.screen.height;
     this.camera.updateProjectionMatrix();
-
-    const fov = this.camera.fov * (Math.PI / 180);
-    const height = 2 * Math.tan(fov / 2) * this.camera.position.z;
-    const width = height * this.camera.aspect;
-
-    this.viewport = { width, height };
-
-    if (this.home && this.home.onResize) {
-      this.home.onResize({ screen: this.screen, viewport: this.viewport });
-    }
-
-    if (this.about && this.about.onResize) {
-      this.about.onResize({ screen: this.screen, viewport: this.viewport });
-    }
   }
 
   onTouchDown(event) {}
@@ -137,20 +125,24 @@ export default class Canvas {
 
   onTouchUp() {}
 
-  onWheel(normalized) {}
+  onLenis(event) {}
+
+  /**
+   * Listeners.
+   */
+  addEventListeners() {
+    events.on('resize', this.onResize);
+    events.on('touchdown', this.onTouchDown);
+    events.on('touchmove', this.onTouchMove);
+    events.on('touchup', this.onTouchUp);
+    events.on('lenis', this.onLenis);
+    events.on('end-update', this.update);
+  }
 
   /**
    * Loop.
    */
-  update(scroll, time) {
-    if (this.home && this.home.update) {
-      this.home.update(scroll);
-    }
-
-    if (this.about && this.about.update) {
-      this.about.update(scroll, time);
-    }
-
+  update() {
     this.renderer.render(this.scene, this.camera);
   }
 }

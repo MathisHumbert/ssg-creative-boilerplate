@@ -1,32 +1,34 @@
-import * as THREE from 'three';
+import { BoxGeometry, Mesh, MeshNormalMaterial } from 'three';
 import gsap from 'gsap';
 
+import { lenis } from '../../classes/Lenis';
+import { responsive } from '../../classes/Responsive';
+
+import { events } from '../../utils/events';
+
 export default class Cube {
-  constructor({ element, scene, screen, viewport }) {
+  constructor({ element, scene }) {
     this.element = element;
     this.scene = scene;
-    this.screen = screen;
-    this.viewport = viewport;
 
-    this.scroll = 0;
     this.isVisible = false;
 
     this.createMesh();
 
-    this.onResize({ viewport, screen });
+    this.addEventsListeners();
   }
 
   /**
    * Create.
    */
   createMesh() {
-    this.geometry = new THREE.BoxGeometry(1, 1, 1);
-    this.material = new THREE.MeshNormalMaterial({
+    this.geometry = new BoxGeometry(1, 1, 1);
+    this.material = new MeshNormalMaterial({
       opacity: 0,
       transparent: true,
     });
 
-    this.mesh = new THREE.Mesh(this.geometry, this.material);
+    this.mesh = new Mesh(this.geometry, this.material);
     this.scene.add(this.mesh);
   }
 
@@ -34,14 +36,14 @@ export default class Cube {
     const rect = this.element.getBoundingClientRect();
 
     this.bounds = {
-      top: rect.top + this.scroll,
+      top: rect.top + lenis.scroll,
       left: rect.left,
       width: rect.width,
       height: rect.height,
     };
 
     this.updateScale();
-    this.updateY(this.scroll);
+    this.updateY(lenis.scroll);
   }
 
   /**
@@ -49,16 +51,19 @@ export default class Cube {
    */
   updateScale() {
     this.scale =
-      (this.viewport.width * this.bounds.width) / this.screen.width / 2;
+      (responsive.viewport.width * this.bounds.width) /
+      responsive.screen.width /
+      2;
 
     this.mesh.scale.set(this.scale, this.scale, this.scale);
   }
 
   updateY(y = 0) {
     this.mesh.position.y =
-      this.viewport.height / 2 -
+      responsive.viewport.height / 2 -
       this.scale -
-      ((this.bounds.top - y) / this.screen.height) * this.viewport.height;
+      ((this.bounds.top - y) / responsive.screen.height) *
+        responsive.viewport.height;
   }
 
   /**
@@ -68,7 +73,7 @@ export default class Cube {
     return new Promise((res) => {
       this.isVisible = true;
 
-      gsap.fromTo(this.material, { opacity: 0 }, { opacity: 1 });
+      gsap.set(this.material, { opacity: 1 });
 
       res();
     });
@@ -89,51 +94,30 @@ export default class Cube {
   /**
    * Events.
    */
-  onResize({ screen, viewport }) {
-    this.screen = screen;
-    this.viewport = viewport;
-
+  onResize() {
     this.createBounds();
+  }
+
+  onLenis(event) {
+    this.updateY(event.scroll);
+  }
+
+  /**
+   * Listeners.
+   */
+  addEventsListeners() {
+    events.on('resize', this.onResize.bind(this));
+    events.on('update', this.update.bind(this));
+    events.on('lenis', this.onLenis.bind(this));
   }
 
   /**
    * Loop.
    */
-  update(scroll, time) {
+  update({ deltaTime }) {
     if (!this.isVisible) return;
 
-    this.updateY(scroll);
-
-    this.mesh.rotation.x += time * 0.5;
-    this.mesh.rotation.y += time * 0.5;
-
-    this.scroll = scroll;
-  }
-
-  /**
-   * Destroy.
-   */
-  destroyGeometry() {
-    if (this.geometry) {
-      this.geometry.dispose();
-    }
-  }
-
-  destroyMaterial() {
-    if (this.material) {
-      this.material.dispose();
-    }
-  }
-
-  destroyMesh() {
-    if (this.mesh) {
-      this.scene.remove(this.mesh);
-    }
-  }
-
-  destroy() {
-    this.destroyGeometry();
-    this.destroyMaterial();
-    this.destroyMesh();
+    this.mesh.rotation.x += deltaTime * 0.5;
+    this.mesh.rotation.y += deltaTime * 0.5;
   }
 }

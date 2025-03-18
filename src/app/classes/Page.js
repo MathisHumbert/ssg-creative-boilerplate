@@ -1,20 +1,18 @@
 import autoBind from 'auto-bind';
-import EventEmitter from 'events';
 import gsap from 'gsap';
 
 import LazyLoad from './LazyLoad';
 import PageLoad from './PageLoad';
 
-import { map, each } from '../utils/dom';
-
 import Appear from '../animations/Appear';
 import Text from '../animations/Text';
 import Title from '../animations/Title';
 
-export default class Page extends EventEmitter {
-  constructor({ classes, id, element, elements, responsive }) {
-    super();
+import { map, each } from '../utils/dom';
+import { events } from '../utils/events';
 
+export default class Page {
+  constructor({ classes, id, element, elements }) {
     autoBind(this);
 
     this.classes = { ...classes };
@@ -32,10 +30,6 @@ export default class Page extends EventEmitter {
         ...elements,
       },
     };
-
-    this.fontSize = responsive.fontSize;
-    this.size = responsive.size;
-    this.scroll = 0;
 
     this.isVisible = false;
 
@@ -69,7 +63,6 @@ export default class Page extends EventEmitter {
 
     this.createAnimations();
     this.createLazyLoader();
-    this.addEventListeners();
   }
 
   /**
@@ -128,10 +121,18 @@ export default class Page extends EventEmitter {
   /**
    * Animations.
    */
-  show(showPage = null) {
-    this.scroll = 0;
+  set() {
+    this.element.classList.add(this.classes.active);
+  }
 
+  remove() {
+    this.element.classList.remove(this.classes.active);
+  }
+
+  show(showPage = null) {
     each(this.animations, (animation) => animation.createAnimation());
+
+    this.addEventListeners();
 
     return new Promise((res) => {
       const tl = showPage || gsap.timeline();
@@ -155,6 +156,8 @@ export default class Page extends EventEmitter {
 
     each(this.animations, (animation) => animation.destroyAnimation());
 
+    this.removeEventListeners();
+
     return new Promise((res) => {
       const tl = hidePage || gsap.timeline();
 
@@ -169,16 +172,11 @@ export default class Page extends EventEmitter {
   /**
    * Events.
    */
-  onResize(size, fontSize) {
-    this.fontSize = fontSize;
-    this.size = size;
-
-    window.requestAnimationFrame(() => {
-      each(this.animations, (animation) => {
-        if (animation.onResize) {
-          animation.onResize();
-        }
-      });
+  onResize(event) {
+    each(this.animations, (animation) => {
+      if (animation.onResize) {
+        animation.onResize();
+      }
     });
   }
 
@@ -188,14 +186,28 @@ export default class Page extends EventEmitter {
 
   onTouchUp() {}
 
-  onWheel(event) {
-    this.scroll = event.scroll;
-  }
+  onLenis(event) {}
 
   /**
    * Listeners.
    */
-  addEventListeners() {}
+  addEventListeners() {
+    events.on('resize', this.onResize);
+    events.on('touchdown', this.onTouchDown);
+    events.on('touchmove', this.onTouchMove);
+    events.on('touchup', this.onTouchUp);
+    events.on('lenis', this.onLenis);
+    events.on('update', this.update);
+  }
+
+  removeEventListeners() {
+    events.off('resize', this.onResize);
+    events.off('touchdown', this.onTouchDown);
+    events.off('touchmove', this.onTouchMove);
+    events.off('touchup', this.onTouchUp);
+    events.off('lenis', this.onLenis);
+    events.off('update', this.update);
+  }
 
   /**
    * Loop.

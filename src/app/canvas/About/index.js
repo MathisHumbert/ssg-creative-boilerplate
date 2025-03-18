@@ -1,14 +1,13 @@
-import * as THREE from 'three';
+import { Group } from 'three';
 
 import Cube from './Cube';
 
 export default class About {
-  constructor({ scene, screen, viewport }) {
+  constructor({ scene, screen }) {
     this.scene = scene;
     this.screen = screen;
-    this.viewport = viewport;
 
-    this.group = new THREE.Group();
+    this.group = new Group();
 
     this.createCube();
   }
@@ -17,8 +16,6 @@ export default class About {
     this.cube = new Cube({
       element: document.querySelector('.about__media'),
       scene: this.group,
-      screen: this.screen,
-      viewport: this.viewport,
     });
   }
 
@@ -49,26 +46,5 @@ export default class About {
     });
 
     return promise;
-  }
-
-  /**
-   * Events.
-   */
-  onResize({ screen, viewport }) {
-    this.screen = screen;
-    this.viewport = viewport;
-
-    if (this.cube && this.cube.onResize) {
-      this.cube.onResize({ screen, viewport });
-    }
-  }
-
-  /**
-   * Loop.
-   */
-  update(scroll, time) {
-    if (this.cube && this.cube.update) {
-      this.cube.update(scroll, time);
-    }
   }
 }

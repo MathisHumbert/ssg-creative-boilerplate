@@ -1,13 +1,14 @@
+import gsap from 'gsap';
+
 import Page from '../../classes/Page';
 
 export default class About extends Page {
-  constructor({ responsive }) {
+  constructor() {
     super({
       id: 'about',
       classes: { active: 'about--active' },
       element: '.about',
       elements: {},
-      responsive,
     });
   }
 
@@ -23,8 +24,6 @@ export default class About extends Page {
    */
   show(prevTemplate) {
     let tl = null;
-
-    this.element.classList.add(this.classes.active);
 
     // if (prevTemplate === null) {
     //   tl = this.showAbout();
@@ -50,8 +49,6 @@ export default class About extends Page {
   hide(nextTemplate) {
     let tl = null;
 
-    this.element.classList.remove(this.classes.active);
-
     // if (nextTemplate === null) {
     //   tl = this.hideAbout();
     // } else if (nextTemplate === 'home') {
@@ -62,17 +59,13 @@ export default class About extends Page {
   }
 
   hideAbout() {
-    const tl = gsap.timeline({
-      onComplete: () => this.element.classList.remove(this.classes.active),
-    });
+    const tl = gsap.timeline();
 
     return tl;
   }
 
   hideAboutToHome() {
-    const tl = gsap.timeline({
-      onComplete: () => this.element.classList.remove(this.classes.active),
-    });
+    const tl = gsap.timeline();
 
     return tl;
   }
@@ -80,22 +73,25 @@ export default class About extends Page {
   /**
    * Events
    */
-  onResize(size, fontSize) {
-    super.onResize(size, fontSize);
-
-    this.fontSize = fontSize;
-    this.size = size;
+  onResize(event) {
+    super.onResize(event);
   }
 
   /**
    * Listeners.
    */
-  addEventListeners() {}
+  addEventListeners() {
+    super.addEventListeners();
+  }
+
+  removeEventListeners() {
+    super.removeEventListeners();
+  }
 
   /**
    * Loop.
    */
-  update(scroll, time) {
-    super.update(scroll, time);
+  update(event) {
+    super.update(event);
   }
 }

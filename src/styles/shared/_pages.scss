@@ -6,11 +6,13 @@
   top: 0;
   width: 100%;
   color: inherit;
+  display: none;
+  pointer-events: none;
   opacity: 0;
   visibility: hidden;
-  pointer-events: none;
 }
 
 %page--active {
+  display: block;
   pointer-events: all;
 }

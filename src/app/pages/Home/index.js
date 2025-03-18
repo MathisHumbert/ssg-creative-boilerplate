@@ -3,13 +3,12 @@ import gsap from 'gsap';
 import Page from '../../classes/Page';
 
 export default class Home extends Page {
-  constructor({ responsive }) {
+  constructor() {
     super({
       id: 'home',
       classes: { active: 'home--active' },
       element: '.home',
       elements: {},
-      responsive,
     });
   }
 
@@ -25,8 +24,6 @@ export default class Home extends Page {
    */
   show(prevTemplate) {
     let tl = null;
-
-    this.element.classList.add(this.classes.active);
 
     // if (prevTemplate === null) {
     //   tl = this.showHome();
@@ -52,8 +49,6 @@ export default class Home extends Page {
   hide(nextTemplate) {
     let tl = null;
 
-    this.element.classList.remove(this.classes.active);
-
     // if (nextTemplate === null) {
     //   tl = this.hideHome();
     // } else if (nextTemplate === 'about') {
@@ -64,17 +59,13 @@ export default class Home extends Page {
   }
 
   hideHome() {
-    const tl = gsap.timeline({
-      onComplete: () => this.element.classList.remove(this.classes.active),
-    });
+    const tl = gsap.timeline();
 
     return tl;
   }
 
   hideHomeToAbout() {
-    const tl = gsap.timeline({
-      onComplete: () => this.element.classList.remove(this.classes.active),
-    });
+    const tl = gsap.timeline();
 
     return tl;
   }
@@ -82,22 +73,25 @@ export default class Home extends Page {
   /**
    * Events
    */
-  onResize(size, fontSize) {
-    super.onResize(size, fontSize);
-
-    this.fontSize = fontSize;
-    this.size = size;
+  onResize(event) {
+    super.onResize(event);
   }
 
   /**
    * Listeners.
    */
-  addEventListeners() {}
+  addEventListeners() {
+    super.addEventListeners();
+  }
+
+  removeEventListeners() {
+    super.removeEventListeners();
+  }
 
   /**
    * Loop.
    */
-  update(scroll, time) {
-    super.update(scroll, time);
+  update(event) {
+    super.update(event);
   }
 }

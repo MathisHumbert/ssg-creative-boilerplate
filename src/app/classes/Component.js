@@ -1,12 +1,9 @@
 import AutoBind from 'auto-bind';
-import EventEmitter from 'events';
 
 import { each } from '../utils/dom';
 
-export default class Component extends EventEmitter {
+export default class Component {
   constructor({ classes, element, elements }) {
-    super();
-
     AutoBind(this);
 
     this.classes = classes;
