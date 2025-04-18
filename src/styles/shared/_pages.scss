@@ -1,11 +1,6 @@
 @use '../utils/_index' as *;
 
 %page {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  color: inherit;
   display: none;
   pointer-events: none;
   opacity: 0;

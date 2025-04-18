@@ -107,9 +107,12 @@ class App {
     this.canvas.onPreloaded();
     this.page.createPageLoader();
 
+    const waitPageShow = this.page.show(null);
+    const waitCanvasShow = this.canvas.show(this.template);
+
     events.emit('resize');
 
-    await Promise.all([this.page.show(null), this.canvas.show(this.template)]);
+    await Promise.all([waitPageShow, waitCanvasShow]);
 
     this.router.onPreloaded();
   }

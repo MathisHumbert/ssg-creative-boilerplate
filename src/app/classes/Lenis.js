@@ -32,6 +32,7 @@ class LenisScroll {
 
   start() {
     this.isActive = true;
+    this.lenis.resize();
     this.lenis.start();
   }
 

@@ -64,12 +64,12 @@ export default class Router {
 
     this.app.page.createPageLoader();
 
+    const waitPageShow = this.app.page.show(prevTemplate);
+    const waitCanvasShow = this.app.canvas.show(this.app.template);
+
     events.emit('resize');
 
-    await Promise.all([
-      this.app.page.show(prevTemplate),
-      this.app.canvas.show(this.app.template),
-    ]);
+    await Promise.all([waitPageShow, waitCanvasShow]);
 
     lenis.start();
 
