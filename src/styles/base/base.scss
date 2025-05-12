@@ -89,23 +89,14 @@ canvas {
   will-change: opacity, visibility;
 }
 
-[data-animation='text'] span {
-  display: block;
-  overflow: hidden;
-
-  span {
-    display: inline-block;
-    vertical-align: top;
-    will-change: transform;
-  }
+[data-animation='text'] div div {
+  will-change: transform;
 }
 
 [data-animation='title'] {
-  overflow: hidden;
+  overflow: clip;
 
-  span {
-    display: inline-block;
-    vertical-align: top;
+  div {
     will-change: transform;
   }
 }

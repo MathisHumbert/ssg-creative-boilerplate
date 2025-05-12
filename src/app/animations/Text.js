@@ -1,23 +1,24 @@
 import gsap from 'gsap';
-import SplitType from 'split-type';
+import { SplitText } from 'gsap/SplitText';
 
 import Animation from '../classes/Animation';
 import { expoOut } from '../utils/easing';
-import { wrapLines } from '../utils/text';
 
 export default class Text extends Animation {
   constructor({ element }) {
-    super({ element, elements: {} });
+    super({ element, elements: { spans: null } });
 
-    this.elements.spans = new SplitType(this.element, {
-      types: 'lines',
-      tagName: 'span',
-      lineClass: '',
-    });
-    wrapLines(this.elements.spans.lines, 'span');
-
-    gsap.set(this.elements.spans.lines, {
-      yPercent: 125,
+    this.elements.spans = SplitText.create(this.element, {
+      type: 'lines',
+      mask: 'lines',
+      autoSplit: true,
+      onSplit: (self) => {
+        if (!this.isAnimated) {
+          gsap.set(self.lines, {
+            yPercent: 125,
+          });
+        }
+      },
     });
   }
 
@@ -39,17 +40,5 @@ export default class Text extends Animation {
     });
 
     super.animateOut();
-  }
-
-  onResize() {
-    this.elements.spans.split();
-
-    wrapLines(this.elements.spans.lines, 'span');
-
-    if (!this.isAnimated) {
-      gsap.set(this.elements.spans.lines, {
-        yPercent: 125,
-      });
-    }
   }
 }

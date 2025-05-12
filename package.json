@@ -29,12 +29,11 @@
     "auto-bind": "^5.0.1",
     "events": "^3.3.0",
     "fontfaceobserver": "^2.3.0",
-    "gsap": "^3.12.7",
+    "gsap": "^3.13.0",
     "imagesloaded": "^5.0.0",
     "include-media": "^2.0.0",
     "lenis": "^1.1.20",
     "prefix": "^1.0.0",
-    "split-type": "^0.3.4",
     "stats.js": "^0.17.0",
     "three": "^0.173.0",
     "ua-parser-js": "^2.0.1"

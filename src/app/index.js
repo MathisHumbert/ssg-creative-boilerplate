@@ -4,7 +4,7 @@ import './classes/WindowEvents';
 
 import AutoBind from 'auto-bind';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { CustomEase, ScrollTrigger, SplitText } from 'gsap/all';
 import Stats from 'stats.js';
 
 import Router from './classes/Router';
@@ -19,7 +19,7 @@ import About from './pages/About';
 
 import { events } from './utils/events';
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 
 class App {
   constructor() {
