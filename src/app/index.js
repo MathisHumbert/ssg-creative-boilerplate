@@ -1,10 +1,10 @@
 import '../styles/index.scss';
 import './utils/scroll';
 import './classes/WindowEvents';
+import './classes/Gsap';
 
 import AutoBind from 'auto-bind';
-import gsap from 'gsap';
-import { CustomEase, ScrollTrigger, SplitText } from 'gsap/all';
+import { ScrollTrigger } from 'gsap/all';
 import Stats from 'stats.js';
 
 import Router from './classes/Router';
@@ -18,8 +18,6 @@ import Home from './pages/Home';
 import About from './pages/About';
 
 import { events } from './utils/events';
-
-gsap.registerPlugin(CustomEase, ScrollTrigger, SplitText);
 
 class App {
   constructor() {

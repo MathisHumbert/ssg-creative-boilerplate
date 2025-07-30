@@ -14,8 +14,11 @@ class LenisScroll {
   init() {
     this.lenis = new Lenis({
       lerp: 0.125,
-      smoothWheel: true,
+      wheelMultiplier: 0.75,
+      touchInertiaMultiplier: 20,
       syncTouch: true,
+      autoRaf: false,
+      anchors: true,
     });
 
     this.lenis.on('scroll', ScrollTrigger.update);

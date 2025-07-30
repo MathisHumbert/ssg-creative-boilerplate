@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { lenis } from './Lenis';
 import { each } from '../utils/dom';
 import { events } from '../utils/events';
+import { delay } from '../utils/math';
 
 export default class Router {
   constructor(app) {
@@ -63,6 +64,8 @@ export default class Router {
     this.app.page.set();
 
     this.app.page.createPageLoader();
+
+    await delay(100);
 
     const waitPageShow = this.app.page.show(prevTemplate);
     const waitCanvasShow = this.app.canvas.show(this.app.template);
