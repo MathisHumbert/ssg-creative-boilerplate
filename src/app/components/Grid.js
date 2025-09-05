@@ -1,5 +1,5 @@
-import Component from '../classes/Component';
-import { each } from '../utils/dom';
+import Component from "../classes/Component";
+import { each } from "../utils/dom";
 
 export default class Grid extends Component {
   constructor() {
@@ -7,13 +7,13 @@ export default class Grid extends Component {
 
     this.count = parseInt(
       getComputedStyle(document.documentElement).getPropertyValue(
-        '--grid-count'
+        "--grid-count"
       )
     );
 
     this.breakpointsMobile = parseInt(
       getComputedStyle(document.documentElement).getPropertyValue(
-        '--breakpoints-mobile'
+        "--breakpoints-mobile"
       )
     );
 
@@ -21,12 +21,12 @@ export default class Grid extends Component {
   }
 
   createGrid() {
-    this.element = document.createElement('div');
-    this.element.className = 'grid__wrapper';
+    this.element = document.createElement("div");
+    this.element.className = "grid__wrapper";
 
     each(Array.from(Array(this.count).keys()), (_) => {
-      const element = document.createElement('div');
-      element.className = 'grid';
+      const element = document.createElement("div");
+      element.className = "grid";
 
       this.element.appendChild(element);
     });
@@ -47,18 +47,18 @@ export default class Grid extends Component {
   onResize() {
     const count = parseInt(
       getComputedStyle(document.documentElement).getPropertyValue(
-        '--grid-count'
+        "--grid-count"
       )
     );
 
     if (this.count !== count) {
       this.count = count;
 
-      this.element.textContent = '';
+      this.element.textContent = "";
 
       each(Array.from(Array(this.count).keys()), (_) => {
-        const element = document.createElement('div');
-        element.className = 'grid';
+        const element = document.createElement("div");
+        element.className = "grid";
 
         this.element.appendChild(element);
       });
@@ -66,8 +66,8 @@ export default class Grid extends Component {
   }
 
   addEventListeners() {
-    document.addEventListener('keydown', (event) => {
-      if (event.ctrlKey && event.key === 'g') {
+    document.addEventListener("keydown", (event) => {
+      if (event.ctrlKey && event.key === "g") {
         if (this.isVisible) {
           this.hideGrid();
         } else {

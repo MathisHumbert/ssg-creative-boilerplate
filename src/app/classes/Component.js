@@ -1,6 +1,6 @@
-import AutoBind from 'auto-bind';
+import AutoBind from "auto-bind";
 
-import { each } from '../utils/dom';
+import { each } from "../utils/dom";
 
 export default class Component {
   constructor({ classes, element, elements }) {

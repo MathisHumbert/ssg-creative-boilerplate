@@ -1,8 +1,8 @@
-import gsap from 'gsap';
-import { SplitText } from 'gsap/SplitText';
+import gsap from "gsap";
+import { SplitText } from "gsap/SplitText";
 
-import Animation from '../classes/Animation';
-import { expoOut } from '../utils/easing';
+import Animation from "../classes/Animation";
+import { expoOut } from "../utils/easing";
 
 export default class Title extends Animation {
   constructor({ element }) {
@@ -11,13 +11,13 @@ export default class Title extends Animation {
     this.rotate = this.element.dataset.rotate;
 
     this.elements.span = SplitText.create(this.element, {
-      type: 'lines',
+      type: "lines",
       autoSplit: true,
       onSplit: (self) => {
         if (!this.isAnimated) {
           gsap.set(self.lines, {
             yPercent: 125,
-            rotate: this.rotate ? '5deg' : 0,
+            rotate: this.rotate ? "5deg" : 0,
           });
         }
       },
@@ -39,7 +39,7 @@ export default class Title extends Animation {
   animateOut() {
     gsap.set(this.elements.span.lines, {
       yPercent: 125,
-      rotate: this.rotate ? '5deg' : 0,
+      rotate: this.rotate ? "5deg" : 0,
     });
 
     super.animateOut();

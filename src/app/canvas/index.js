@@ -1,12 +1,12 @@
-import { PerspectiveCamera, Scene, WebGLRenderer } from 'three';
-import AutoBind from 'auto-bind';
+import { PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import AutoBind from "auto-bind";
 
-import Home from './Home';
-import About from './About';
+import Home from "./Home";
+import About from "./About";
 
-import { responsive } from '../classes/Responsive';
+import { responsive } from "../classes/Responsive";
 
-import { events } from '../utils/events';
+import { events } from "../utils/events";
 
 export default class Canvas {
   constructor() {
@@ -81,11 +81,11 @@ export default class Canvas {
   hide(nextTemplate) {
     let promise;
 
-    if (this.template === 'home') {
+    if (this.template === "home") {
       promise = this.home.hide(nextTemplate);
     }
 
-    if (this.template === 'about') {
+    if (this.template === "about") {
       promise = this.about.hide(nextTemplate);
     }
 
@@ -95,11 +95,11 @@ export default class Canvas {
   show(template) {
     let promise;
 
-    if (template === 'home') {
+    if (template === "home") {
       promise = this.home.show(this.template);
     }
 
-    if (template === 'about') {
+    if (template === "about") {
       promise = this.about.show(this.template);
     }
 
@@ -131,12 +131,12 @@ export default class Canvas {
    * Listeners.
    */
   addEventListeners() {
-    events.on('resize', this.onResize);
-    events.on('touchdown', this.onTouchDown);
-    events.on('touchmove', this.onTouchMove);
-    events.on('touchup', this.onTouchUp);
-    events.on('lenis', this.onLenis);
-    events.on('end-update', this.update);
+    events.on("resize", this.onResize);
+    events.on("touchdown", this.onTouchDown);
+    events.on("touchmove", this.onTouchMove);
+    events.on("touchup", this.onTouchUp);
+    events.on("lenis", this.onLenis);
+    events.on("end-update", this.update);
   }
 
   /**

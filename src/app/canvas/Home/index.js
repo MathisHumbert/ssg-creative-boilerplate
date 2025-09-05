@@ -1,6 +1,6 @@
-import { PlaneGeometry, Group } from 'three';
+import { PlaneGeometry, Group } from "three";
 
-import Media from './Media';
+import Media from "./Media";
 
 export default class Home {
   constructor({ scene, screen, viewport }) {
@@ -16,7 +16,7 @@ export default class Home {
 
   createMedia() {
     this.media = new Media({
-      element: document.querySelector('.home__media'),
+      element: document.querySelector(".home__media"),
       scene: this.group,
       geometry: this.geometry,
     });

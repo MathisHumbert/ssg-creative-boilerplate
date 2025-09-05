@@ -1,7 +1,7 @@
-import Lenis from 'lenis';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Lenis from "lenis";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import { events } from '../utils/events';
+import { events } from "../utils/events";
 
 class LenisScroll {
   constructor() {
@@ -13,18 +13,19 @@ class LenisScroll {
 
   init() {
     this.lenis = new Lenis({
+      wrapper: document.getElementById("scroll-wrapper"),
+      content: document.getElementById("scroll-content"),
       lerp: 0.125,
       wheelMultiplier: 0.75,
-      touchInertiaMultiplier: 20,
-      syncTouch: true,
+      touchMultiplier: 0.75,
       autoRaf: false,
       anchors: true,
     });
 
-    this.lenis.on('scroll', ScrollTrigger.update);
-    this.lenis.on('scroll', (e) => events.emit('lenis', e));
+    this.lenis.on("scroll", ScrollTrigger.update);
+    this.lenis.on("scroll", (e) => events.emit("lenis", e));
 
-    events.on('start-update', this.update.bind(this));
+    events.on("start-update", this.update.bind(this));
   }
 
   update = ({ time }) => {

@@ -1,15 +1,15 @@
-import { LinearFilter, TextureLoader } from 'three';
-import imagesLoaded from 'imagesloaded';
-import FontFaceObserver from 'fontfaceobserver';
+import { LinearFilter, TextureLoader } from "three";
+import imagesLoaded from "imagesloaded";
+import FontFaceObserver from "fontfaceobserver";
 
-import Component from '../classes/Component';
-import { map } from '../utils/dom';
-import { events } from '../utils/events';
+import Component from "../classes/Component";
+import { map } from "../utils/dom";
+import { events } from "../utils/events";
 
 export default class Preloader extends Component {
   constructor() {
     super({
-      element: '.preloader',
+      element: ".preloader",
     });
 
     this.loadedTextureUrl = [];
@@ -24,13 +24,13 @@ export default class Preloader extends Component {
   preloadPage(content) {
     this.loadedTextureUrl.push(window.location.pathname);
 
-    const images = content.querySelectorAll('data-src');
+    const images = content.querySelectorAll("data-src");
 
     const preloadImages = new Promise((res) => {
       imagesLoaded(content, { background: true }, res);
     });
 
-    const preloadTextures = this.loadTextures([...images, 'texture.jpeg']);
+    const preloadTextures = this.loadTextures([...images, "texture.jpeg"]);
 
     const preloadFonts = this.loadFonts();
 
@@ -46,12 +46,12 @@ export default class Preloader extends Component {
         this.element.parentNode.removeChild(this.element);
       }
 
-      events.emit('loaded');
+      events.emit("loaded");
     });
   }
 
   loadPage(content) {
-    const images = content.querySelectorAll('data-src');
+    const images = content.querySelectorAll("data-src");
 
     if (!this.loadedTextureUrl.includes(window.location.pathname)) {
       this.loadedTextureUrl.push(window.location.pathname);
@@ -81,7 +81,7 @@ export default class Preloader extends Component {
   }
 
   loadFonts() {
-    const satoshiFont = new FontFaceObserver('Satoshi');
+    const satoshiFont = new FontFaceObserver("Satoshi");
 
     return Promise.all([satoshiFont.load()]);
   }

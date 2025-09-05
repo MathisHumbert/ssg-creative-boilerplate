@@ -1,9 +1,9 @@
-@use '../utils/_index' as *;
+@use "../utils/_index" as *;
 
 @font-face {
   font-family: $font-satoshi;
-  src: url('../fonts/satoshi-medium.woff2') format('woff2'),
-    url('../fonts/satoshi-medium.woff') format('woff');
+  src: url("../fonts/satoshi-medium.woff2") format("woff2"),
+    url("../fonts/satoshi-medium.woff") format("woff");
   font-weight: 500;
   font-style: normal;
   font-display: swap;

@@ -1,4 +1,4 @@
-import gsap from 'gsap';
+import gsap from "gsap";
 
 export function lerp(p1, p2, t) {
   return gsap.utils.interpolate(p1, p2, t);

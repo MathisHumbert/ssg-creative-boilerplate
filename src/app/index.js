@@ -1,23 +1,23 @@
-import '../styles/index.scss';
-import './utils/scroll';
-import './classes/WindowEvents';
-import './classes/Gsap';
+import "../styles/index.scss";
+import "./utils/scroll";
+import "./classes/WindowEvents";
+import "./classes/Gsap";
 
-import AutoBind from 'auto-bind';
-import { ScrollTrigger } from 'gsap/all';
-import Stats from 'stats.js';
+import AutoBind from "auto-bind";
+import { ScrollTrigger } from "gsap/all";
+import Stats from "stats.js";
 
-import Router from './classes/Router';
+import Router from "./classes/Router";
 
-import Canvas from './canvas';
+import Canvas from "./canvas";
 
-import Preloader from './components/Preloader';
-import Grid from './components/Grid';
+import Preloader from "./components/Preloader";
+import Grid from "./components/Grid";
 
-import Home from './pages/Home';
-import About from './pages/About';
+import Home from "./pages/Home";
+import About from "./pages/About";
 
-import { events } from './utils/events';
+import { events } from "./utils/events";
 
 class App {
   constructor() {
@@ -27,7 +27,7 @@ class App {
     this.lastUrl = window.location.pathname;
     this.isNavigating = true;
 
-    if (import.meta.env.MODE === 'development') {
+    if (import.meta.env.MODE === "development") {
       this.createStats();
       this.createGrid();
     }
@@ -56,11 +56,11 @@ class App {
     };
 
     this.templates = {
-      '/': 'home',
-      '/about': 'about',
+      "/": "home",
+      "/about": "about",
     };
 
-    if (this.url !== '/' && this.url.endsWith('/')) {
+    if (this.url !== "/" && this.url.endsWith("/")) {
       this.url = this.url.slice(0, -1);
     }
 
@@ -83,7 +83,7 @@ class App {
 
     this.preloader.preloadPage(this.page.element);
 
-    events.on('loaded', this.onPreloaded);
+    events.on("loaded", this.onPreloaded);
   }
 
   createStats() {
@@ -108,7 +108,7 @@ class App {
     const waitPageShow = this.page.show(null);
     const waitCanvasShow = this.canvas.show(this.template);
 
-    events.emit('resize');
+    events.emit("resize");
 
     await Promise.all([waitPageShow, waitCanvasShow]);
 
@@ -134,7 +134,7 @@ class App {
    * Listeners.
    */
   addEventListeners() {
-    events.on('update', this.update.bind(this));
+    events.on("update", this.update.bind(this));
   }
 }
 

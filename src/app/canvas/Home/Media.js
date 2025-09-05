@@ -1,13 +1,13 @@
-import { Mesh, RawShaderMaterial, Vector2 } from 'three';
-import gsap from 'gsap';
+import { Mesh, RawShaderMaterial, Vector2 } from "three";
+import gsap from "gsap";
 
-import fragment from '../../shaders/fragment.glsl';
-import vertex from '../../shaders/vertex.glsl';
+import fragment from "../../shaders/fragment.glsl";
+import vertex from "../../shaders/vertex.glsl";
 
-import { lenis } from '../../classes/Lenis';
-import { responsive } from '../../classes/Responsive';
+import { lenis } from "../../classes/Lenis";
+import { responsive } from "../../classes/Responsive";
 
-import { events } from '../../utils/events';
+import { events } from "../../utils/events";
 
 export default class Media {
   constructor({ element, scene, geometry }) {
@@ -28,7 +28,7 @@ export default class Media {
    */
 
   createMaterial() {
-    const texture = window.TEXTURES['texture.jpeg'];
+    const texture = window.TEXTURES["texture.jpeg"];
 
     this.material = new RawShaderMaterial({
       fragmentShader: fragment,
@@ -141,9 +141,9 @@ export default class Media {
    * Listeners.
    */
   addEventsListeners() {
-    events.on('resize', this.onResize.bind(this));
-    events.on('update', this.update.bind(this));
-    events.on('lenis', this.onLenis.bind(this));
+    events.on("resize", this.onResize.bind(this));
+    events.on("update", this.update.bind(this));
+    events.on("lenis", this.onLenis.bind(this));
   }
 
   /**

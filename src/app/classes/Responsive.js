@@ -8,23 +8,23 @@ class Responsive {
 
     const breakpointsDesktop = parseInt(
       getComputedStyle(document.documentElement).getPropertyValue(
-        '--breakpoints-desktop'
+        "--breakpoints-desktop"
       )
     );
     const breakpointsMobile = parseInt(
       getComputedStyle(document.documentElement).getPropertyValue(
-        '--breakpoints-mobile'
+        "--breakpoints-mobile"
       )
     );
 
     const sizesDesktop = parseInt(
       getComputedStyle(document.documentElement).getPropertyValue(
-        '--sizes-desktop'
+        "--sizes-desktop"
       )
     );
     const sizesMobile = parseInt(
       getComputedStyle(document.documentElement).getPropertyValue(
-        '--sizes-mobile'
+        "--sizes-mobile"
       )
     );
 

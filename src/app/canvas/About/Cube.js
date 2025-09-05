@@ -1,10 +1,10 @@
-import { BoxGeometry, Mesh, MeshNormalMaterial } from 'three';
-import gsap from 'gsap';
+import { BoxGeometry, Mesh, MeshNormalMaterial } from "three";
+import gsap from "gsap";
 
-import { lenis } from '../../classes/Lenis';
-import { responsive } from '../../classes/Responsive';
+import { lenis } from "../../classes/Lenis";
+import { responsive } from "../../classes/Responsive";
 
-import { events } from '../../utils/events';
+import { events } from "../../utils/events";
 
 export default class Cube {
   constructor({ element, scene }) {
@@ -106,9 +106,9 @@ export default class Cube {
    * Listeners.
    */
   addEventsListeners() {
-    events.on('resize', this.onResize.bind(this));
-    events.on('update', this.update.bind(this));
-    events.on('lenis', this.onLenis.bind(this));
+    events.on("resize", this.onResize.bind(this));
+    events.on("update", this.update.bind(this));
+    events.on("lenis", this.onLenis.bind(this));
   }
 
   /**

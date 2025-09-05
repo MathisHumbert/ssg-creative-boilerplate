@@ -1,8 +1,8 @@
-import Clock from './Clock';
-import { lenis } from './Lenis';
-import { responsive } from './Responsive';
+import Clock from "./Clock";
+import { lenis } from "./Lenis";
+import { responsive } from "./Responsive";
 
-import { events } from '../utils/events';
+import { events } from "../utils/events";
 
 class WindowEvents {
   constructor() {
@@ -15,25 +15,25 @@ class WindowEvents {
   }
 
   addEventListeners() {
-    window.addEventListener('resize', this.onResize, { passive: true });
+    window.addEventListener("resize", this.onResize, { passive: true });
 
-    window.addEventListener('click', this.onClick, { passive: true });
+    window.addEventListener("click", this.onClick, { passive: true });
 
-    window.addEventListener('mousedown', this.onTouchDown, { passive: true });
-    window.addEventListener('mousemove', this.onTouchMove, { passive: true });
-    window.addEventListener('mouseup', this.onTouchUp, { passive: true });
+    window.addEventListener("mousedown", this.onTouchDown, { passive: true });
+    window.addEventListener("mousemove", this.onTouchMove, { passive: true });
+    window.addEventListener("mouseup", this.onTouchUp, { passive: true });
 
-    window.addEventListener('touchstart', this.onTouchDown, { passive: true });
-    window.addEventListener('touchmove', this.onTouchMove, { passive: true });
-    window.addEventListener('touchend', this.onTouchUp, { passive: true });
+    window.addEventListener("touchstart", this.onTouchDown, { passive: true });
+    window.addEventListener("touchmove", this.onTouchMove, { passive: true });
+    window.addEventListener("touchend", this.onTouchUp, { passive: true });
 
-    window.addEventListener('wheel', this.onWheel, { passive: true });
+    window.addEventListener("wheel", this.onWheel, { passive: true });
   }
 
   onResize = () => {
     responsive.onResize();
 
-    events.emit('resize', {
+    events.emit("resize", {
       screen: responsive.screen,
       viewport: responsive.viewport,
       fontSize: responsive.fontSize,
@@ -41,23 +41,23 @@ class WindowEvents {
   };
 
   onTouchDown = (event) => {
-    events.emit('touchdown', event);
+    events.emit("touchdown", event);
   };
 
   onTouchMove = (event) => {
-    events.emit('touchmove', event);
+    events.emit("touchmove", event);
   };
 
   onTouchUp = (event) => {
-    events.emit('touchup', event);
+    events.emit("touchup", event);
   };
 
   onClick = (event) => {
-    events.emit('click', event);
+    events.emit("click", event);
   };
 
   onWheel = (event) => {
-    events.emit('wheel', event);
+    events.emit("wheel", event);
   };
 
   update(time) {
@@ -65,12 +65,12 @@ class WindowEvents {
     const deltaTime = elapsedTime - this.oldElapsedTime;
     this.oldElapsedTime = elapsedTime;
 
-    events.emit('start-update', {
+    events.emit("start-update", {
       time,
       deltaTime,
     });
 
-    events.emit('update', {
+    events.emit("update", {
       time,
       deltaTime,
       scroll: lenis.scroll,
@@ -78,7 +78,7 @@ class WindowEvents {
       direction: lenis.direction,
     });
 
-    events.emit('end-update', {
+    events.emit("end-update", {
       time,
       deltaTime,
     });

@@ -1,7 +1,7 @@
-import gsap from 'gsap';
+import gsap from "gsap";
 
-import Animation from '../classes/Animation';
-import { easeInOut } from '../utils/easing';
+import Animation from "../classes/Animation";
+import { easeInOut } from "../utils/easing";
 
 export default class Appear extends Animation {
   constructor({ element }) {

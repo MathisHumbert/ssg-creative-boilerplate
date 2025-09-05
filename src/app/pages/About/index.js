@@ -1,13 +1,13 @@
-import gsap from 'gsap';
+import gsap from "gsap";
 
-import Page from '../../classes/Page';
+import Page from "../../classes/Page";
 
 export default class About extends Page {
   constructor() {
     super({
-      id: 'about',
-      classes: { active: 'about--active' },
-      element: '.about',
+      id: "about",
+      classes: { active: "about--active" },
+      element: ".about",
       elements: {},
     });
   }

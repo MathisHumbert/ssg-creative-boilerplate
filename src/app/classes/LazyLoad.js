@@ -1,11 +1,11 @@
-import Component from './Component';
+import Component from "./Component";
 
 export default class LazyLoad extends Component {
   constructor({ element }) {
     super({ element });
 
     this.element = element;
-    this.src = this.element.getAttribute('lazy-src');
+    this.src = this.element.getAttribute("lazy-src");
 
     this.createObserver();
   }

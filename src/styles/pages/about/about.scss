@@ -1,5 +1,5 @@
-@use '../../shared/index' as *;
-@use '../../utils/index' as *;
+@use "../../shared/index" as *;
+@use "../../utils/index" as *;
 
 .about {
   @extend %page;

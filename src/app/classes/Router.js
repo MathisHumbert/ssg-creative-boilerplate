@@ -1,10 +1,10 @@
-import AutoBind from 'auto-bind';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import AutoBind from "auto-bind";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import { lenis } from './Lenis';
-import { each } from '../utils/dom';
-import { events } from '../utils/events';
-import { delay } from '../utils/math';
+import { lenis } from "./Lenis";
+import { each } from "../utils/dom";
+import { events } from "../utils/events";
+import { delay } from "../utils/math";
 
 export default class Router {
   constructor(app) {
@@ -26,7 +26,7 @@ export default class Router {
   }
 
   async onChange({ url, push }) {
-    url = url.replace(window.location.origin, '');
+    url = url.replace(window.location.origin, "");
 
     if (url === this.url || this.isNavigating) return;
 
@@ -49,7 +49,7 @@ export default class Router {
     ScrollTrigger.getAll().forEach((t) => t.kill());
 
     if (push) {
-      window.history.pushState({}, '', url);
+      window.history.pushState({}, "", url);
     }
 
     const prevTemplate = this.app.template;
@@ -70,7 +70,7 @@ export default class Router {
     const waitPageShow = this.app.page.show(prevTemplate);
     const waitCanvasShow = this.app.canvas.show(this.app.template);
 
-    events.emit('resize');
+    events.emit("resize");
 
     await Promise.all([waitPageShow, waitCanvasShow]);
 
@@ -82,7 +82,7 @@ export default class Router {
   onPopState(e) {
     if (this.isNavigating) {
       e.preventDefault();
-      window.history.pushState({}, '', this.lastUrl);
+      window.history.pushState({}, "", this.lastUrl);
       return;
     }
     this.lastUrl = window.location.pathname;
@@ -94,14 +94,14 @@ export default class Router {
   }
 
   addLinkListeners() {
-    const links = document.querySelectorAll('a');
+    const links = document.querySelectorAll("a");
 
     each(links, (link) => {
       const isLocal = link.href.indexOf(window.location.origin) > -1;
-      const isAnchor = link.href.indexOf('#') > -1;
+      const isAnchor = link.href.indexOf("#") > -1;
 
-      const isNotEmail = link.href.indexOf('mailto') === -1;
-      const isNotPhone = link.href.indexOf('tel') === -1;
+      const isNotEmail = link.href.indexOf("mailto") === -1;
+      const isNotPhone = link.href.indexOf("tel") === -1;
 
       if (isLocal) {
         link.onclick = (event) => {
@@ -115,13 +115,13 @@ export default class Router {
           }
         };
       } else if (isNotEmail && isNotPhone) {
-        link.rel = 'noopener';
-        link.target = '_blank';
+        link.rel = "noopener";
+        link.target = "_blank";
       }
     });
   }
 
   addEventListeners() {
-    window.addEventListener('popstate', this.onPopState, { passive: true });
+    window.addEventListener("popstate", this.onPopState, { passive: true });
   }
 }

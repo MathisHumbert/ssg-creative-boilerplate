@@ -1,4 +1,4 @@
-import Component from '../classes/Component';
+import Component from "../classes/Component";
 
 export default class PageLoad extends Component {
   constructor({ element }) {
@@ -8,7 +8,7 @@ export default class PageLoad extends Component {
   }
 
   createLoader() {
-    const src = this.element.getAttribute('page-src');
+    const src = this.element.getAttribute("page-src");
 
     if (src) {
       this.element.src = src;

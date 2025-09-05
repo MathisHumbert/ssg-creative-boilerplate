@@ -5,7 +5,7 @@ const toArray = (element) => {
     return element;
   } else if (element instanceof NodeList || element instanceof HTMLCollection) {
     return Array.from(element);
-  } else if (typeof element === 'object') {
+  } else if (typeof element === "object") {
     return Object.entries(element);
   } else {
     return [element];

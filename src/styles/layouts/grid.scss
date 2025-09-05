@@ -1,10 +1,10 @@
-@use '../shared/index' as *;
-@use '../utils/index' as *;
+@use "../shared/index" as *;
+@use "../utils/index" as *;
 
 .grid__wrapper {
   @extend %cover;
 
-  z-index: z('grid');
+  z-index: z("grid");
   pointer-events: none;
   display: flex;
   justify-content: space-between;

@@ -1,5 +1,5 @@
-@use 'sass:list';
-@use '../utils/variables' as *;
+@use "sass:list";
+@use "../utils/variables" as *;
 
 @function z($name) {
   @if list.index($z-indexes, $name) {

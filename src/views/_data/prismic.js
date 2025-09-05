@@ -1,6 +1,6 @@
-import 'dotenv/config';
-import * as prismicH from '@prismicio/helpers';
-import * as prismic from '@prismicio/client';
+import "dotenv/config";
+import * as prismicH from "@prismicio/helpers";
+import * as prismic from "@prismicio/client";
 
 const PRISMIC_REPO = process.env.PRISMIC_REPOSITORY;
 const PRISMIC_TOKEN = process.env.PRISMIC_ACCESS_TOKEN;
@@ -25,15 +25,15 @@ const client = prismic.createClient(PRISMIC_REPO, {
 });
 
 async function fetchAbout() {
-  return client.getSingle('about');
+  return client.getSingle("about");
 }
 
 async function fetchHome() {
-  return client.getSingle('home');
+  return client.getSingle("home");
 }
 
 async function fetchMeta() {
-  return client.getSingle('meta');
+  return client.getSingle("meta");
 }
 
 async function fetchPrismicData() {

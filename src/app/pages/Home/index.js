@@ -1,13 +1,13 @@
-import gsap from 'gsap';
+import gsap from "gsap";
 
-import Page from '../../classes/Page';
+import Page from "../../classes/Page";
 
 export default class Home extends Page {
   constructor() {
     super({
-      id: 'home',
-      classes: { active: 'home--active' },
-      element: '.home',
+      id: "home",
+      classes: { active: "home--active" },
+      element: ".home",
       elements: {},
     });
   }

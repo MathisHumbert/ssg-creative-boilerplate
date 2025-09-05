@@ -1,5 +1,5 @@
-import AutoBind from 'auto-bind';
-import Prefix from 'prefix';
+import AutoBind from "auto-bind";
+import Prefix from "prefix";
 
 export default class Animation {
   constructor({ element, elements }) {
@@ -14,14 +14,14 @@ export default class Animation {
     this.threshold = isNaN(Number(threshold)) ? 0 : Number(threshold);
 
     this.target = target ? element.closest(target) : element;
-    this.transformPrefix = Prefix('transform');
+    this.transformPrefix = Prefix("transform");
 
     this.isVisible = false;
     this.isAnimated = false;
   }
 
   createAnimation() {
-    if ('IntersectionObserver' in window) {
+    if ("IntersectionObserver" in window) {
       this.animateOut();
 
       this.createObserver();

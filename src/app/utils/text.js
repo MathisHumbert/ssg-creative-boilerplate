@@ -20,6 +20,6 @@ export const wrapLine = (el, wrapType, wrapClass) => {
 
   wrapEl.textContent = el.textContent;
 
-  el.textContent = '';
+  el.textContent = "";
   el.appendChild(wrapEl);
 };

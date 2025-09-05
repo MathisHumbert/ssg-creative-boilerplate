@@ -1,16 +1,16 @@
-import gsap from 'gsap';
-import { SplitText } from 'gsap/SplitText';
+import gsap from "gsap";
+import { SplitText } from "gsap/SplitText";
 
-import Animation from '../classes/Animation';
-import { expoOut } from '../utils/easing';
+import Animation from "../classes/Animation";
+import { expoOut } from "../utils/easing";
 
 export default class Text extends Animation {
   constructor({ element }) {
     super({ element, elements: { spans: null } });
 
     this.elements.spans = SplitText.create(this.element, {
-      type: 'lines',
-      mask: 'lines',
+      type: "lines",
+      mask: "lines",
       autoSplit: true,
       onSplit: (self) => {
         if (!this.isAnimated) {

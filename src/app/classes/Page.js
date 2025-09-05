@@ -1,15 +1,15 @@
-import autoBind from 'auto-bind';
-import gsap from 'gsap';
+import autoBind from "auto-bind";
+import gsap from "gsap";
 
-import LazyLoad from './LazyLoad';
-import PageLoad from './PageLoad';
+import LazyLoad from "./LazyLoad";
+import PageLoad from "./PageLoad";
 
-import Appear from '../animations/Appear';
-import Text from '../animations/Text';
-import Title from '../animations/Title';
+import Appear from "../animations/Appear";
+import Text from "../animations/Text";
+import Title from "../animations/Title";
 
-import { map, each } from '../utils/dom';
-import { events } from '../utils/events';
+import { map, each } from "../utils/dom";
+import { events } from "../utils/events";
 
 export default class Page {
   constructor({ classes, id, element, elements }) {
@@ -20,8 +20,8 @@ export default class Page {
     this.selectors = {
       element,
       elements: {
-        lazyLoaders: '[lazy-src]',
-        pageLoaders: '[page-src]',
+        lazyLoaders: "[lazy-src]",
+        pageLoaders: "[page-src]",
 
         animationsAppears: '[data-animation="appear"]',
         animationsTexts: '[data-animation="text"]',
@@ -139,8 +139,8 @@ export default class Page {
 
       if (!showPage) {
         tl.set(document.documentElement, {
-          backgroundColor: this.element.getAttribute('data-background'),
-          color: this.element.getAttribute('data-color'),
+          backgroundColor: this.element.getAttribute("data-background"),
+          color: this.element.getAttribute("data-color"),
         }).set(this.element, { autoAlpha: 1 }, 0);
       }
 
@@ -192,21 +192,21 @@ export default class Page {
    * Listeners.
    */
   addEventListeners() {
-    events.on('resize', this.onResize);
-    events.on('touchdown', this.onTouchDown);
-    events.on('touchmove', this.onTouchMove);
-    events.on('touchup', this.onTouchUp);
-    events.on('lenis', this.onLenis);
-    events.on('update', this.update);
+    events.on("resize", this.onResize);
+    events.on("touchdown", this.onTouchDown);
+    events.on("touchmove", this.onTouchMove);
+    events.on("touchup", this.onTouchUp);
+    events.on("lenis", this.onLenis);
+    events.on("update", this.update);
   }
 
   removeEventListeners() {
-    events.off('resize', this.onResize);
-    events.off('touchdown', this.onTouchDown);
-    events.off('touchmove', this.onTouchMove);
-    events.off('touchup', this.onTouchUp);
-    events.off('lenis', this.onLenis);
-    events.off('update', this.update);
+    events.off("resize", this.onResize);
+    events.off("touchdown", this.onTouchDown);
+    events.off("touchmove", this.onTouchMove);
+    events.off("touchup", this.onTouchUp);
+    events.off("lenis", this.onLenis);
+    events.off("update", this.update);
   }
 
   /**

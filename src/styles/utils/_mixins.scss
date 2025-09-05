@@ -1,5 +1,5 @@
-@use 'sass:map';
-@use '../utils/variables' as *;
+@use "sass:map";
+@use "../utils/variables" as *;
 
 %cover {
   height: 100%;
@@ -21,7 +21,7 @@
   position: relative;
 
   &:after {
-    content: '';
+    content: "";
     display: inline-block;
     padding-top: $width / $height * 100%;
     width: 100%;

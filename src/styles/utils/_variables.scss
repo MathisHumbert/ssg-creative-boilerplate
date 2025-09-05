@@ -1,68 +1,68 @@
-@use 'sass:map';
-@use 'sass:list';
+@use "sass:map";
+@use "sass:list";
 
 $ease-in-out: cubic-bezier(0.7, 0, 0.3, 1);
 $expo-in-out: cubic-bezier(0.9, 0, 0.1, 1);
 $ease-out: cubic-bezier(0.39, 0.575, 0.565, 1);
 $expo-out: cubic-bezier(0.19, 1, 0.22, 1);
 
-$font-satoshi: 'Satoshi';
+$font-satoshi: "Satoshi";
 
 $color-white: rgb(222, 222, 222);
 $color-black: rgb(30, 30, 30);
 $color-pink: rgb(255, 152, 162);
 
 $colors: (
-  'white': $color-white,
-  'black': $color-black,
-  'pink': $color-pink,
+  "white": $color-white,
+  "black": $color-black,
+  "pink": $color-pink,
 );
 
 $breakpoints: (
-  'desktop': 1920,
-  'mobile': 768,
+  "desktop": 1920,
+  "mobile": 768,
 );
 
 $sizes: (
-  'desktop': 1440,
-  'mobile': 375,
+  "desktop": 1440,
+  "mobile": 375,
 );
 
-$z-indexes: ('grid', 'preloader', 'navigation', 'content', 'canvas');
+$z-indexes: ("grid", "preloader", "navigation", "content", "canvas");
 
 $grid: (
-  'count': (
+  "count": (
     12,
     6,
   ),
-  'gutter': (
+  "gutter": (
     2rem,
     2rem,
   ),
-  'margin': (
+  "margin": (
     3.2rem,
     2.4rem,
   ),
 );
 
 :root {
-  --breakpoints-desktop: #{map.get($breakpoints, 'desktop')};
-  --breakpoints-mobile: #{map.get($breakpoints, 'mobile')};
-  --sizes-desktop: #{map.get($sizes, 'desktop')};
-  --sizes-mobile: #{map.get($sizes, 'mobile')};
+  --breakpoints-desktop: #{map.get($breakpoints, "desktop")};
+  --breakpoints-mobile: #{map.get($breakpoints, "mobile")};
+  --sizes-desktop: #{map.get($sizes, "desktop")};
+  --sizes-mobile: #{map.get($sizes, "mobile")};
 
-  --grid-count: #{list.nth(map.get($grid, 'count'), 1)};
-  --grid-gutter: #{list.nth(map.get($grid, 'gutter'), 1)};
-  --grid-margin: #{list.nth(map.get($grid, 'margin'), 1)};
+  --grid-count: #{list.nth(map.get($grid, "count"), 1)};
+  --grid-gutter: #{list.nth(map.get($grid, "gutter"), 1)};
+  --grid-margin: #{list.nth(map.get($grid, "margin"), 1)};
 
   @each $name, $color in $colors {
     --#{$name}: #{$color};
   }
 
   @media (max-width: #{map.get($breakpoints, 'mobile')}px) {
-    --grid-count: #{list.nth(map.get($grid, 'count'), 2)};
-    --grid-gutter: #{list.nth(map.get($grid, 'gutter'), 2)};
-    --grid-margin: #{list.nth(map.get($grid, 'margin'), 2)};
+    --grid-count: #{list.nth(map.get($grid, "count"), 2)};
+    --grid-gutter: #{list.nth(map.get($grid, "gutter"), 2)};
+    --grid-margin: #{list.nth(map.get($grid, "margin"), 2)};
   }
 }
 

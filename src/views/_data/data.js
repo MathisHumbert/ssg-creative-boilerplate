@@ -1,1 +1,1 @@
-export default { home: { title: 'Home' }, about: { title: 'About' } };
+export default { home: { title: "Home" }, about: { title: "About" } };

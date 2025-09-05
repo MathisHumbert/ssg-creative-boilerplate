@@ -5,8 +5,10 @@ html(lang="en")
 
   body
     include _includes/layouts/nav.pug
-    .content 
-      include _includes/pages/home.pug
-      include _includes/pages/about.pug
+    #scroll-wrapper
+      #scroll-content
+        .content 
+          include _includes/pages/home.pug
+          include _includes/pages/about.pug
 
   script(type="module", src="/src/app/index.js")

@@ -1,6 +1,6 @@
-import { Group } from 'three';
+import { Group } from "three";
 
-import Cube from './Cube';
+import Cube from "./Cube";
 
 export default class About {
   constructor({ scene, screen }) {
@@ -14,7 +14,7 @@ export default class About {
 
   createCube() {
     this.cube = new Cube({
-      element: document.querySelector('.about__media'),
+      element: document.querySelector(".about__media"),
       scene: this.group,
     });
   }
